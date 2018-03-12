@@ -6,7 +6,7 @@
 	       th:if="${#fields.hasGlobalErrors()}"
 	       th:each="error : ${#fields.errors('global')}"
 	       th:text="${error}">Validation error</p>
-     <div th:replace="fragments/header :: header"/>
+     <div th:replace="fragments/header :: header"></div>
    	 <form th:action="@{/registration}" th:object="${user}" method="post" enctype="multipart/form-data">
       <div class="main-body">
          <div class="row">
