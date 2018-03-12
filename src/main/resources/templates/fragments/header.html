@@ -1,0 +1,227 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head-tag">
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+      <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+
+      <style type="text/css">
+        .pwidth{
+          width: 150px;
+          margin-left: 20px;
+        }
+        /* The switch - the box around the slider */
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+        .footer{
+          background-color: #f1f1f1;
+          padding-top: 35px;
+          margin-top: 30px;
+        }
+        /* Hide default HTML checkbox */
+        .switch input {
+         display:none;
+        }
+        /* The slider */
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        .slider:before {
+          position: absolute;
+          font-family: 'Glyphicons Halflings';
+          content: "\e013" !important;
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          color: green;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        input:checked + .slider {
+          background-color: #2196F3;
+        }
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+        input:checked + .slider:before {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+        .pwidth2{
+          width: 200px;
+          margin-left: 20px;
+        }
+        .martop10{
+          margin-top: 20px;
+        }
+        .martop20{
+          margin-top: 30px;
+        }
+        .width50{
+          margin-left: -5px;
+          width: 100px ;
+        }
+        .margleft10{
+          margin-left: -15px !important;
+        }
+        .marginleft100{
+          margin-left: 257px;
+        }
+        .textclass{
+          width: 86%;
+          margin-left: -37px;
+        }
+        .width100{
+          margin-left: -5px;
+          width: 150px ;
+        }
+        .height100{
+          border: 1px solid #f4a682;
+          height: 100px;
+          margin-left: 15px;
+        }
+        .marg10{
+          margin-left: 10px;
+        }
+        .pro-pic{
+          height: 100%;
+          width: 136%;
+          margin-left: -14px;
+        }
+        .text-align{
+          text-align: center !important;
+        }
+        .input-class{
+          width: 100%;
+        }
+        .header{
+          font-size: 18px;
+          font-weight: 500px;
+          padding-top: 35px;
+          background-color: #addad8;
+          margin-left: 0px;
+        }
+        .main-body{
+          overflow-x: hidden !important;
+        }
+        .phone{
+          height: 33px;
+          margin-left: -24px;
+          padding-right: 30px !important;
+        }
+        .mandatory{
+          color: red;
+        }
+        body {
+         font-family:Arial, Sans-Serif;
+        }
+        /* Nicely lines up the labels. */
+        form label {
+         display:inline-block;
+          width:140px;
+        }
+        /* You could add a class to all the input boxes instead, if you like. That would be safer, and more backwards-compatible */
+        /*form input[type="text"], form input[type="password"], form input[type="email"] {
+         width:160px;
+        }
+        form .line {
+         clear:both;
+        }
+        form .line.submit {
+         text-align:right;
+        }
+        */
+        .select-file{
+          width: 45%;
+        }
+        .tobe-paid{
+        		color: blue;
+        }
+        #my_file {
+		    display: none;
+		}
+		.register{
+          margin-top: 50px;
+          font-size: 20px;
+        }
+
+      </style>
+      <script>
+   		// <![CDATA[
+	      $(document).ready(function() {
+		    	  $("#datepicker").datepicker({ 
+		    	        autoclose: true, 
+		    	        todayHighlight: true
+		    	  }).datepicker('update', new Date());
+		    	  //$(".country").chosen();
+		      var noOfChilds = $('#noOfChilds');
+		      var noOfAdults = $('#noOfAdults');
+		      var amount = $('.tobe-paid');
+		      var selTopup = $('#sel-topup');
+		      var topup = $('#topup');
+		      var totalAmount = 0;
+			    noOfChilds.blur(function(){
+			    	    if (noOfChilds.val() != '') {
+			    	    		totalAmount += noOfChilds.val() * 100;
+			    	    		amount.text("To be paid : " + totalAmount);
+			    	    }
+			    	});
+			    noOfAdults.blur(function(){
+				    	if (noOfAdults.val() != '') {
+			    	    		totalAmount += noOfAdults.val() * 200;
+			    	    		amount.text("To be paid : " + totalAmount);
+			    	    }
+		    		});
+			    
+			    selTopup.on('change', function(){
+			    		topup.val(selTopup.val());
+			    });
+			    
+			    $('.select-file').on('click', function(){
+			    		$('#my_file').click();
+			    });
+			    
+			    $('#my_file').on('change', function(file){
+			        if (file && file.target) {
+			            var reader = new FileReader();			            
+			            reader.onload = function (e) {
+			            		$('.pro-pic').attr('src', e.target.result);
+			            }
+
+			            reader.readAsDataURL(file.target.files[0]);
+			        }
+			    });
+			    $(document).on('keypress', ".numberValidation", function(event){
+			    		return (event.which >= 48 && event.which <= 57) 
+			    		|| event.which == 46 || event.keyCode == 8 || event.keyCode == 46 
+			    		|| (event.keyCode >= 37 && event.keyCode <= 40 )|| event.keyCode == 9;
+			    });
+	      })
+	      // ]]>
+      </script>
+   </head>
+   <body>
+   	<div th:fragment="header" class="row height100 text-align header"><b> MCM Studio Themepark </b></div>
+   </body>
+</html>
