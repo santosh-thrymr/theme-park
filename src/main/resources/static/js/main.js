@@ -80,14 +80,18 @@ $(document).ready(function() {
 	$(document).on('keyup', '.single-entry', function() {
 		var myk = $(this).attr('myk');
 		var std = $(this).attr('std');
+//		console.log("std",std);
 		var value = $(this).val();
 		var nationality=$(".nationality").val();
 		var calculatedValue;
 		if((myk!='' || std!='') && value!=''){
-			if(nationality !='' && nationality=='malaysian'){
+			if(myk!=null && (nationality !='' && nationality=='malaysian')){
 				calculatedValue=myk*value;
-			} else {
+			} else if(std!=null) {
 				calculatedValue=std*value;
+			}else{
+				$(this).closest('td').next('td').find('input').val("NA");
+				return;
 			}
 			
 		$(this).closest('td').next('td').find('input').val(calculatedValue);
@@ -220,16 +224,16 @@ $(document).ready(function() {
 		var calculatedValue;
 		var nextcalculatedValue;
 		if((myk!='' || std!='') && value!=''){
-			if(nationality !='' && nationality=='malaysian'){
+			if(myk!=null && (nationality !='' && nationality=='malaysian')){
 				calculatedValue=myk*value;
-			} else {
+			} else if(std!=''){
 				calculatedValue=std*value;
 			}
 		}
 		if((nextmyk!='' || nextstd!='') && nextvalue!=''){
 			if(nationality !='' && nationality=='malaysian'){
 				nextcalculatedValue=nextmyk*nextvalue;
-			} else {
+			} else if(nextstd!=''){
 				nextcalculatedValue=nextstd*nextvalue;
 			}
 		}
@@ -263,7 +267,7 @@ $(document).ready(function() {
 		if((myk!='' || std!='') && value!=''){
 			if(nationality !='' && nationality=='malaysian'){
 				calculatedValue=myk*value;
-			} else {
+			} else if(std!=''){
 				calculatedValue=std*value;
 			}
 		}
@@ -271,7 +275,7 @@ $(document).ready(function() {
 			if(nationality !='' && nationality=='malaysian'){
 				
 				prevcalculatedValue=prevmyk*prevvalue;
-			} else {
+			} else if(prevstd!=''){
 				prevcalculatedValue=prevstd*prevvalue;
 			}
 		}
