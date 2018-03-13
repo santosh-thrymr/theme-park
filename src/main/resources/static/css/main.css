@@ -130,3 +130,10 @@ header h3{
 .profile {
 	height: 77vh !important;
 }
+.login-page {
+	background-color: #fff !important;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,.2), 0 5px 5px 0 rgba(0,0,0,.24);
+    padding: 30px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}

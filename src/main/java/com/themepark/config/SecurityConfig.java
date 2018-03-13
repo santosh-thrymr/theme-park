@@ -1,53 +1,68 @@
 package com.themepark.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
 
+import com.themepark.repository.AppUserRepository;
+
+@CrossOrigin
 @Configuration
-public class SecurityConfig { //extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-   /* @Autowired
-    private UserService userService;
+	@Autowired
+	private AppUserRepository appUserRepository;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                    .antMatchers(
-                            "/registration**",
-                            "/js/**",
-                            "/css/**",
-                            "/img/**",
-                            "/webjars/**").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-                        .loginPage("/login")
-                            .permitAll()
-                .and()
-                    .logout()
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login?logout")
-                .permitAll();
-    }*/
+	@Autowired
+	private SecurityAuthenticationProvider demoAuthenticationProvider;
 
-    /*@Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }*/
+	@Autowired
+	private AccessDeniedHandler accessDeniedHandler;
+	
+	@Autowired
+	CustomAuthFailureHandler customAuthenticationFailureHandler;
 
-    /*@Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        //auth.setUserDetailsService(userService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
-    }
+	@Override
+	public void configure(final WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/**" , "/login**", "/logout**", "/js/**", "/css/**", "/imgages/**", "/fonts/**", "/webjars/**");
+	}
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }*/
+	@Override
+	protected void configure(final HttpSecurity http) throws Exception {
 
+		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+
+		http.csrf().disable().authorizeRequests()
+
+				.antMatchers("/registration/**").hasAnyAuthority("SUPER_ADMIN")
+
+				.anyRequest().authenticated().and().formLogin().loginPage("/login")
+				.failureHandler(customAuthenticationFailureHandler).permitAll().and().logout()
+				.invalidateHttpSession(true).clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout");
+	}
+
+	@Override
+	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(this.demoAuthenticationProvider);
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

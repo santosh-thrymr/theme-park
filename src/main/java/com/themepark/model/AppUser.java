@@ -1,25 +1,37 @@
 package com.themepark.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.themepark.enums.Gender;
 import com.themepark.enums.Role;
 
 @Entity
-public class AppUser extends BaseEntity {
+public class AppUser extends BaseEntity implements Authentication {
 
 	private String firstName;
 
 	private String lastName;
 
+	@NotNull
 	private String email;
 
+	private String password;
+
+	@NotNull
 	private String displayName;
 
 	@Lob
@@ -34,10 +46,13 @@ public class AppUser extends BaseEntity {
 
 	private Integer phoneIntCallingCode;
 
+	@NotNull
 	private Long phoneNumber;
 
+	@NotNull
 	private Integer mobileIntCallingCode;
 
+	@NotNull
 	private Long mobileNumber;
 
 	private Date dob;
@@ -48,12 +63,15 @@ public class AppUser extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String address;
 
+	@NotNull
 	private String countryOfResidence;
 
+	@NotNull
 	private String nationality;
 
 	private Long postalCode;
 
+	@NotNull
 	private String identityNumber;
 
 	private Float topup;
@@ -99,6 +117,14 @@ public class AppUser extends BaseEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getDisplayName() {
@@ -267,5 +293,51 @@ public class AppUser extends BaseEntity {
 
 	public void setTopup(Float topup) {
 		this.topup = topup;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		final List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+
+        // TODO : check role.toString()
+        list.add(new SimpleGrantedAuthority(this.role.toString()));
+
+        return list;
+	}
+
+	@Override
+	public Object getCredentials() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object getDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object getPrincipal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAuthenticated() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		
 	}
 }

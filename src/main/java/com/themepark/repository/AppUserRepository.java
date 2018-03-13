@@ -9,5 +9,6 @@ import com.themepark.model.AppUser;
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     AppUser findByEmail(String email);
-
+    
+    AppUser findFirstByEmailAndPassword(String email, String password);
 }

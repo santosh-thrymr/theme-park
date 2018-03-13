@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.themepark.dto.AnnualPassDto;
 import com.themepark.dto.BigLondonAdmissionFeeDto;
 import com.themepark.dto.EntryPackageDto;
+import com.themepark.dto.LoginDto;
 import com.themepark.dto.SingleEntryPassDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.enums.Gender;
@@ -40,7 +41,7 @@ import com.themepark.repository.SingleEntryPassRepository;
 public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
-    private AppUserRepository userRepository;
+    private AppUserRepository appUserRepository;
     
     @Autowired
     private EntryPackageRepository entryPackageRepository;
@@ -70,7 +71,7 @@ public class AppUserServiceImpl implements AppUserService {
     private BCryptPasswordEncoder passwordEncoder;*/
 
     public AppUser findByEmail(String email){
-        return userRepository.findByEmail(email);
+        return appUserRepository.findByEmail(email);
     }
 
     @Transactional
@@ -119,7 +120,7 @@ public class AppUserServiceImpl implements AppUserService {
         
         user.setTopup(registrationDto.getTopup());
         
-        AppUser appUser = userRepository.save(user);
+        AppUser appUser = appUserRepository.save(user);
         
         //Saving packages data
         saveEntryPackages(appUser, registrationDto);
@@ -133,7 +134,7 @@ public class AppUserServiceImpl implements AppUserService {
         //Saving Big london admission fee data
         saveBigLondonAdmissionFee(appUser, registrationDto);
         
-        userRepository.save(user);
+        appUserRepository.save(user);
         
         return appUser;
     }
@@ -285,6 +286,30 @@ public class AppUserServiceImpl implements AppUserService {
 		}
 		
 		appUser.setTotalPaidForBigLondonFee(totalAmountPaid);
+	}
+
+	@Override
+	public AppUser validateUser(LoginDto loginDto) {
+		if (loginDto == null || StringUtils.isEmpty(loginDto.getEmail()) || StringUtils.isEmpty(loginDto.getPassword())) {
+			return null;
+		}
+		
+		AppUser appUser = this.appUserRepository.findFirstByEmailAndPassword(loginDto.getEmail().trim(), loginDto.getPassword().trim());
+		if (appUser == null) {
+			return null;
+		}
+		
+		return appUser;
+	}
+	
+	@Override
+	public AppUser getLoggedInUser(Object appUserId) {
+		if (appUserId == null) {
+			return null;
+		}
+		Long appUserIdStr = (Long) appUserId;
+
+		return this.appUserRepository.findOne(appUserIdStr);
 	}
 
     /*@Override

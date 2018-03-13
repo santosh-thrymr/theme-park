@@ -2,6 +2,7 @@ package com.themepark.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.themepark.dto.LoginDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.model.AppUser;
 
@@ -11,4 +12,8 @@ public interface AppUserService {
 	AppUser findByEmail(String email);
 
 	AppUser save(UserRegistrationDto registration, MultipartFile multipartFile);
+
+	AppUser getLoggedInUser(Object appUserId);
+	
+	AppUser validateUser(LoginDto loginDto);
 }

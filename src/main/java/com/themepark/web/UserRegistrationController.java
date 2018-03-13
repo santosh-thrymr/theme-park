@@ -1,8 +1,16 @@
 package com.themepark.web;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.themepark.dto.UserRegistrationDto;
-import com.themepark.model.SingleEntryPass;
+import com.themepark.model.AppUser;
 import com.themepark.repository.AnnualPassRepository;
 import com.themepark.repository.AppUserRepository;
 import com.themepark.repository.BLAdmissionFeeRepository;
@@ -26,7 +34,7 @@ import com.themepark.service.AppUserService;
 
 @Controller
 @RequestMapping("/registration")
-public class UserRegistrationController {
+public class UserRegistrationController implements AccessDeniedHandler {
 
 	@Autowired
 	private AppUserService userService;
@@ -45,6 +53,9 @@ public class UserRegistrationController {
 	
 	@Autowired
 	private BLAdmissionFeeRepository blAdmissionFeeRepository;
+	
+	@Autowired
+	private AppUserService appUserService;
 
 	@ModelAttribute("user")
 	public UserRegistrationDto userRegistrationDto() {
@@ -52,7 +63,12 @@ public class UserRegistrationController {
 	}
 
 	@GetMapping
-	public String showRegistrationForm(Model model) {
+	public String showRegistrationForm(Model model, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+		HttpSession httpSession = httpServletRequest.getSession();
+		AppUser appUser = this.appUserService.getLoggedInUser(httpSession.getAttribute("APP_USER_ID"));
+		if (appUser == null) {
+			return "redirect:/";
+		}
 		model.addAttribute("packages", this.entryPackageRepository.findAll());
 		model.addAttribute("singleEntryPassList", this.singleEntryPassRepository.findAll());
 		model.addAttribute("annualPassList", this.annualPassRepository.findAll());
@@ -79,5 +95,13 @@ public class UserRegistrationController {
 		userService.save(userDto, multipartFile);
 		redirAttrs.addFlashAttribute("message", "Form has been saved successfully.");
 		return "redirect:/registration";
+	}
+
+	@Override
+	public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException arg2)
+			throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		System.out.println("error, login req");
+		httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
 	}
 }
