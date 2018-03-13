@@ -12,11 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 
 import com.themepark.repository.AppUserRepository;
+import com.themepark.service.AppUserService;
 
 @CrossOrigin
 @Configuration
@@ -25,20 +25,17 @@ import com.themepark.repository.AppUserRepository;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private AppUserRepository appUserRepository;
+	private AppUserService appUserService;
 
 	@Autowired
 	private SecurityAuthenticationProvider demoAuthenticationProvider;
 
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
-	
-	@Autowired
-	CustomAuthFailureHandler customAuthenticationFailureHandler;
 
 	@Override
 	public void configure(final WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/**" , "/login**", "/logout**", "/js/**", "/css/**", "/imgages/**", "/fonts/**", "/webjars/**");
+		web.ignoring().antMatchers("/" , "/login**", "/logout", "/js/**", "/css/**", "/imgages/**", "/fonts/**", "/webjars/**");
 	}
 
 	@Override
@@ -48,12 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf().disable().authorizeRequests()
 
-				.antMatchers("/registration/**").hasAnyAuthority("SUPER_ADMIN")
+				.antMatchers("/registration/**").hasAnyAuthority("SUPER_ADMIN", "USER")
 
-				.anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.failureHandler(customAuthenticationFailureHandler).permitAll().and().logout()
-				.invalidateHttpSession(true).clearAuthentication(true)
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout");
+				.anyRequest().authenticated().and()
+
+				.addFilterBefore(new AuthenticationFilter(this.appUserService), BasicAuthenticationFilter.class)
+				.exceptionHandling().accessDeniedHandler(this.accessDeniedHandler);
 	}
 
 	@Override

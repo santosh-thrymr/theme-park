@@ -53,8 +53,6 @@ public class UserRegistrationDto {
 
 	private Float topup;
 
-	private Float amountToBePaid;
-
 	private List<EntryPackageDto> entryPackageDtos = new ArrayList<>();
 
 	private List<SingleEntryPassDto> singleEntryPassDtos = new ArrayList<>();
@@ -207,14 +205,6 @@ public class UserRegistrationDto {
 		this.topup = topup;
 	}
 
-	public Float getAmountToBePaid() {
-		return amountToBePaid;
-	}
-
-	public void setAmountToBePaid(Float amountToBePaid) {
-		this.amountToBePaid = amountToBePaid;
-	}
-
 	public List<EntryPackageDto> getEntryPackageDtos() {
 		return entryPackageDtos;
 	}
@@ -255,7 +245,7 @@ public class UserRegistrationDto {
 				+ ", mobileIntCallingCode=" + mobileIntCallingCode + ", mobileNumber=" + mobileNumber + ", dob=" + dob
 				+ ", gender=" + gender + ", address=" + address + ", countryOfResidence=" + countryOfResidence
 				+ ", nationality=" + nationality + ", postalCode=" + postalCode + ", identityNumber=" + identityNumber
-				+ ", topup=" + topup + ", amountToBePaid=" + amountToBePaid + ", entryPackageDtos=" + entryPackageDtos
+				+ ", topup=" + topup + ", entryPackageDtos=" + entryPackageDtos
 				+ ", singleEntryPassDtos=" + singleEntryPassDtos + ", annualPassDtos=" + annualPassDtos
 				+ ", bigLondonAdmissionFeeDtos=" + bigLondonAdmissionFeeDtos + "]";
 	}

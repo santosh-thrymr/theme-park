@@ -9,28 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.themepark.model.AppUser;
-import com.themepark.repository.AppUserRepository;
 import com.themepark.service.AppUserService;
 
 @CrossOrigin
 public class AuthenticationFilter extends OncePerRequestFilter {
-	private AppUserRepository appUserRepository;
-	
-	@Autowired
 	private AppUserService appUserService;
 
-	public AuthenticationFilter(final AppUserRepository appUserRepository) {
+	public AuthenticationFilter(final AppUserService appUserService) {
 		super();
-		this.appUserRepository = appUserRepository;
+		this.appUserService = appUserService;
 	}
 
 	@Override
@@ -40,7 +33,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		System.out.println("  ---  url " + request.getRequestURL());
 
 		HttpSession httpSession = request.getSession();
-		String appUserId = (String) httpSession.getAttribute("APP_USER_ID");
+		Long appUserId = (Long) httpSession.getAttribute("APP_USER_ID");
 
 		try {
 			AppUser appUser = this.appUserService.getLoggedInUser(appUserId);

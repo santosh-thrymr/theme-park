@@ -43,7 +43,7 @@ public class MainController {
 		HttpSession httpSession = request.getSession();
 		AppUser appUser = this.appUserService.getLoggedInUser(httpSession.getAttribute("APP_USER_ID"));
 		if (appUser != null) {
-			return "redirect:/registration";
+			return "index";
 		}
 		
 		return "login";

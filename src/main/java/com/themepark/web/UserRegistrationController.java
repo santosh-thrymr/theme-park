@@ -67,7 +67,7 @@ public class UserRegistrationController implements AccessDeniedHandler {
 		HttpSession httpSession = httpServletRequest.getSession();
 		AppUser appUser = this.appUserService.getLoggedInUser(httpSession.getAttribute("APP_USER_ID"));
 		if (appUser == null) {
-			return "redirect:/";
+			return "redirect:/registration";
 		}
 		model.addAttribute("packages", this.entryPackageRepository.findAll());
 		model.addAttribute("singleEntryPassList", this.singleEntryPassRepository.findAll());
@@ -78,7 +78,7 @@ public class UserRegistrationController implements AccessDeniedHandler {
 
 	@PostMapping
 	public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
-			@RequestPart("file") final MultipartFile multipartFile, BindingResult result, RedirectAttributes redirAttrs) {
+			BindingResult result, RedirectAttributes redirAttrs, @RequestPart("file") final MultipartFile multipartFile) {
 
 		System.out.println("userDto : " + userDto);
 		/*AppUser existing = userService.findByEmail(userDto.getEmail());
