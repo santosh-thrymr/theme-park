@@ -15,9 +15,14 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.themepark.dto.UserRegistrationDto;
+import com.themepark.model.SingleEntryPass;
+import com.themepark.repository.AnnualPassRepository;
 import com.themepark.repository.AppUserRepository;
+import com.themepark.repository.BLAdmissionFeeRepository;
+import com.themepark.repository.EntryPackageRepository;
+import com.themepark.repository.SingleEntryPassRepository;
 import com.themepark.service.AppUserService;
-import com.themepark.web.dto.UserRegistrationDto;
 
 @Controller
 @RequestMapping("/registration")
@@ -28,6 +33,18 @@ public class UserRegistrationController {
 
 	@Autowired
 	private AppUserRepository appUserRepository;
+	
+	@Autowired
+	private EntryPackageRepository entryPackageRepository;
+	
+	@Autowired
+	private SingleEntryPassRepository singleEntryPassRepository;
+	
+	@Autowired
+	private AnnualPassRepository annualPassRepository;
+	
+	@Autowired
+	private BLAdmissionFeeRepository blAdmissionFeeRepository;
 
 	@ModelAttribute("user")
 	public UserRegistrationDto userRegistrationDto() {
@@ -36,6 +53,10 @@ public class UserRegistrationController {
 
 	@GetMapping
 	public String showRegistrationForm(Model model) {
+		model.addAttribute("packages", this.entryPackageRepository.findAll());
+		model.addAttribute("singleEntryPassList", this.singleEntryPassRepository.findAll());
+		model.addAttribute("annualPassList", this.annualPassRepository.findAll());
+		model.addAttribute("bigLondonAdmissionFeeList", this.blAdmissionFeeRepository.findAll());
 		return "registration";
 	}
 
@@ -43,6 +64,7 @@ public class UserRegistrationController {
 	public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
 			@RequestPart("file") final MultipartFile multipartFile, BindingResult result, RedirectAttributes redirAttrs) {
 
+		System.out.println("userDto : " + userDto);
 		/*AppUser existing = userService.findByEmail(userDto.getEmail());
 		if (existing != null) {
 			result.rejectValue("email", null, "There is already an account registered with that email");

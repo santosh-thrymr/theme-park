@@ -22,12 +22,14 @@ public class ThemeParkApplication {
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry.addResourceHandler(
 	                "/webjars/**",
-	                "/img/**",
+	                "/images/**",
+	                "/fonts/**",
 	                "/css/**",
 	                "/js/**")
 	                .addResourceLocations(
 	                        "classpath:/META-INF/resources/webjars/",
-	                        "classpath:/static/img/",
+	                        "classpath:/static/images/",
+	                        "classpath:/static/fonts/",
 	                        "classpath:/static/css/",
 	                        "classpath:/static/js/");
 	    }

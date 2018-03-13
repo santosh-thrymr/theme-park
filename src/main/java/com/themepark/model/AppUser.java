@@ -6,21 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 
-import lombok.Data;
+import com.themepark.enums.Gender;
+import com.themepark.enums.Role;
 
-
-@Data
 @Entity
-public class AppUser {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class AppUser extends BaseEntity {
 
 	private String firstName;
 
@@ -29,7 +21,7 @@ public class AppUser {
 	private String email;
 
 	private String displayName;
-	
+
 	@Lob
 	private byte[] avatar;
 
@@ -39,6 +31,16 @@ public class AppUser {
 	private Boolean enableSmsUpdate;
 
 	private Boolean enableEmailUpdate;
+
+	public Integer getIntCallingCode() {
+		return intCallingCode;
+	}
+
+	public void setIntCallingCode(Integer intCallingCode) {
+		this.intCallingCode = intCallingCode;
+	}
+
+	private Integer intCallingCode;
 
 	private Long phoneNumber;
 
@@ -59,18 +61,20 @@ public class AppUser {
 	private Long postalCode;
 
 	private String identityNumber;
-	
-	private Integer noOfChilds;
-	
-	private Integer noOfAdults;
-	
+
 	private Float topup;
-	
-	private Float amountToBePaid;
+
+	private Float totalPaidForPackages;
+
+	private Float totalPaidForSingleEntryPass;
+
+	private Float totalPaidForAnnualPass;
+
+	private Float totalPaidForBigLondonFee;
 
 	public AppUser() {
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -114,11 +118,11 @@ public class AppUser {
 	public byte[] getAvatar() {
 		return avatar;
 	}
-	
+
 	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
 	}
-	
+
 	public Role getRole() {
 		return role;
 	}
@@ -215,20 +219,36 @@ public class AppUser {
 		this.identityNumber = identityNumber;
 	}
 
-	public Integer getNoOfChilds() {
-		return noOfChilds;
+	public Float getTotalPaidForPackages() {
+		return totalPaidForPackages;
 	}
 
-	public void setNoOfChilds(Integer noOfChilds) {
-		this.noOfChilds = noOfChilds;
+	public void setTotalPaidForPackages(Float totalPaidForPackages) {
+		this.totalPaidForPackages = totalPaidForPackages;
 	}
 
-	public Integer getNoOfAdults() {
-		return noOfAdults;
+	public Float getTotalPaidForSingleEntryPass() {
+		return totalPaidForSingleEntryPass;
 	}
 
-	public void setNoOfAdults(Integer noOfAdults) {
-		this.noOfAdults = noOfAdults;
+	public void setTotalPaidForSingleEntryPass(Float totalPaidForSingleEntryPass) {
+		this.totalPaidForSingleEntryPass = totalPaidForSingleEntryPass;
+	}
+
+	public Float getTotalPaidForAnnualPass() {
+		return totalPaidForAnnualPass;
+	}
+
+	public void setTotalPaidForAnnualPass(Float totalPaidForAnnualPass) {
+		this.totalPaidForAnnualPass = totalPaidForAnnualPass;
+	}
+
+	public Float getTotalPaidForBigLondonFee() {
+		return totalPaidForBigLondonFee;
+	}
+
+	public void setTotalPaidForBigLondonFee(Float totalPaidForBigLondonFee) {
+		this.totalPaidForBigLondonFee = totalPaidForBigLondonFee;
 	}
 
 	public Float getTopup() {
@@ -237,19 +257,5 @@ public class AppUser {
 
 	public void setTopup(Float topup) {
 		this.topup = topup;
-	}
-
-	public Float getAmountToBePaid() {
-		return amountToBePaid;
-	}
-
-	public void setAmountToBePaid(Float amountToBePaid) {
-		this.amountToBePaid = amountToBePaid;
-	}
-
-	@Override
-	public String toString() {
-		return "User{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-				+ ", email='" + email + '\'' + ", password='" + "*********" + '\'' + ", role=" + role + '}';
 	}
 }

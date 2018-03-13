@@ -1,4 +1,7 @@
-package com.themepark.web.dto;
+package com.themepark.dto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -17,11 +20,11 @@ public class UserRegistrationDto {
 	private String lastName;
 
 	@Email
-	private String email = "ask@ask.com";
+	private String email;
 
 	@NotEmpty
 	private String displayName;
-	
+
 	private Boolean enableSmsUpdate;
 
 	private Boolean enableEmailUpdate;
@@ -43,14 +46,18 @@ public class UserRegistrationDto {
 	private Long postalCode;
 
 	private String identityNumber;
-	
-	private Integer noOfChilds;
-	
-	private Integer noOfAdults;
-	
+
 	private Float topup;
-	
+
 	private Float amountToBePaid;
+
+	private List<EntryPackageDto> entryPackageDtos = new ArrayList<>();
+
+	private List<SingleEntryPassDto> singleEntryPassDtos = new ArrayList<>();
+
+	private List<AnnualPassDto> annualPassDtos = new ArrayList<>();
+
+	private List<BigLondonAdmissionFeeDto> bigLondonAdmissionFeeDtos = new ArrayList<>();
 
 	public String getFirstName() {
 		return firstName;
@@ -83,7 +90,7 @@ public class UserRegistrationDto {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-	
+
 	public Boolean getEnableSmsUpdate() {
 		return enableSmsUpdate;
 	}
@@ -172,22 +179,6 @@ public class UserRegistrationDto {
 		this.identityNumber = identityNumber;
 	}
 
-	public Integer getNoOfChilds() {
-		return noOfChilds;
-	}
-
-	public void setNoOfChilds(Integer noOfChilds) {
-		this.noOfChilds = noOfChilds;
-	}
-
-	public Integer getNoOfAdults() {
-		return noOfAdults;
-	}
-
-	public void setNoOfAdults(Integer noOfAdults) {
-		this.noOfAdults = noOfAdults;
-	}
-
 	public Float getTopup() {
 		return topup;
 	}
@@ -204,14 +195,47 @@ public class UserRegistrationDto {
 		this.amountToBePaid = amountToBePaid;
 	}
 
+	public List<EntryPackageDto> getEntryPackageDtos() {
+		return entryPackageDtos;
+	}
+
+	public void setEntryPackageDtos(List<EntryPackageDto> entryPackageDtos) {
+		this.entryPackageDtos = entryPackageDtos;
+	}
+
+	public List<SingleEntryPassDto> getSingleEntryPassDtos() {
+		return singleEntryPassDtos;
+	}
+
+	public void setSingleEntryPassDtos(List<SingleEntryPassDto> singleEntryPassDtos) {
+		this.singleEntryPassDtos = singleEntryPassDtos;
+	}
+
+	public List<AnnualPassDto> getAnnualPassDtos() {
+		return annualPassDtos;
+	}
+
+	public void setAnnualPassDtos(List<AnnualPassDto> annualPassDtos) {
+		this.annualPassDtos = annualPassDtos;
+	}
+
+	public List<BigLondonAdmissionFeeDto> getBigLondonAdmissionFeeDtos() {
+		return bigLondonAdmissionFeeDtos;
+	}
+
+	public void setBigLondonAdmissionFeeDtos(List<BigLondonAdmissionFeeDto> bigLondonAdmissionFeeDtos) {
+		this.bigLondonAdmissionFeeDtos = bigLondonAdmissionFeeDtos;
+	}
+
 	@Override
 	public String toString() {
 		return "UserRegistrationDto [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", displayName=" + displayName + ", enableSmsUpdate=" + enableSmsUpdate
-				+ ", enableEmailUpdate=" + enableEmailUpdate + ", phoneNumber=" + phoneNumber + ", mobileNumber="
-				+ mobileNumber + ", dob=" + dob + ", gender=" + gender + ", address=" + address
-				+ ", countryOfResidence=" + countryOfResidence + ", nationality=" + nationality + ", postalCode="
-				+ postalCode + ", identityNumber=" + identityNumber + ", noOfChilds=" + noOfChilds + ", noOfAdults="
-				+ noOfAdults + ", topup=" + topup + "]";
+				+ ", displayName=" + displayName + ", enableSmsUpdate=" + enableSmsUpdate + ", enableEmailUpdate="
+				+ enableEmailUpdate + ", phoneNumber=" + phoneNumber + ", mobileNumber=" + mobileNumber + ", dob=" + dob
+				+ ", gender=" + gender + ", address=" + address + ", countryOfResidence=" + countryOfResidence
+				+ ", nationality=" + nationality + ", postalCode=" + postalCode + ", identityNumber=" + identityNumber
+				+ ", topup=" + topup + ", amountToBePaid=" + amountToBePaid + ", entryPackageDtos=" + entryPackageDtos
+				+ ", singleEntryPassDtos=" + singleEntryPassDtos + ", annualPassDtos=" + annualPassDtos
+				+ ", bigLondonAdmissionFeeDtos=" + bigLondonAdmissionFeeDtos + "]";
 	}
 }

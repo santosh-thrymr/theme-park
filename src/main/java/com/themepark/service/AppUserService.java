@@ -2,8 +2,8 @@ package com.themepark.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.themepark.dto.UserRegistrationDto;
 import com.themepark.model.AppUser;
-import com.themepark.web.dto.UserRegistrationDto;
 
 //public interface UserService extends UserDetailsService {
 public interface AppUserService {
