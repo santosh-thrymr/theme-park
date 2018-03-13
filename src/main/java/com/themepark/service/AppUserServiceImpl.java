@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +73,7 @@ public class AppUserServiceImpl implements AppUserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public AppUser save(UserRegistrationDto registrationDto, MultipartFile multipartFile){
         AppUser user = new AppUser();
         
@@ -90,7 +93,9 @@ public class AppUserServiceImpl implements AppUserService {
         
         user.setEnableSmsUpdate(registrationDto.getEnableSmsUpdate());
         user.setEnableEmailUpdate(registrationDto.getEnableEmailUpdate());
+        user.setPhoneIntCallingCode(registrationDto.getPhoneIntCallingCode());
         user.setPhoneNumber(registrationDto.getPhoneNumber());
+        user.setMobileIntCallingCode(registrationDto.getMobileIntCallingCode());
         user.setMobileNumber(registrationDto.getMobileNumber());
         
 		if (!StringUtils.isEmpty(registrationDto.getDob())) {
@@ -127,6 +132,8 @@ public class AppUserServiceImpl implements AppUserService {
         
         //Saving Big london admission fee data
         saveBigLondonAdmissionFee(appUser, registrationDto);
+        
+        userRepository.save(user);
         
         return appUser;
     }
@@ -208,7 +215,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 				appUserAnnualPass.setAppUser(appUser);
 				appUserAnnualPass.setAnnualPass(annualPass);
-
+				appUserAnnualPass.setSelectedCount(dto.getSelectedCount());
 				if (annualPass.getPrice() != null) {
 					appUserAnnualPass.setPrice(dto.getSelectedCount() * annualPass.getPrice());
 					totalAmountPaid += dto.getSelectedCount() * annualPass.getPrice();
@@ -230,7 +237,7 @@ public class AppUserServiceImpl implements AppUserService {
 				AppUserBLAdmissionFee appUserBLAdmissionFee = this.appUserBLAdmissionFeeRepository
 						.findByAppUserAndBigLondonAdmissionFee(appUser, bigLondonAdmissionFee);
 				
-				if (appUserBLAdmissionFee != null) {
+				if (appUserBLAdmissionFee == null) {
 					appUserBLAdmissionFee = new AppUserBLAdmissionFee();
 				}
 				
@@ -254,7 +261,8 @@ public class AppUserServiceImpl implements AppUserService {
 					}
 					
 					this.appUserBLAdmissionFeeRepository.save(appUserBLAdmissionFee);
-				} else if (dto.getKidsOrSrCitizenSelectedCount() != null) {
+				}
+				if (dto.getKidsOrSrCitizenSelectedCount() != null) {
 					appUserBLAdmissionFee.setKidsOrSrCitizenSelectedCount(dto.getKidsOrSrCitizenSelectedCount());
 					
 					if (!StringUtils.isEmpty(registrationDto.getNationality())
