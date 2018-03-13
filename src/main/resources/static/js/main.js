@@ -54,9 +54,15 @@ $(document).ready(function() {
 	$(document).on('keyup', '.entry-pkg', function() {
 		var attrValue = $(this).attr('data-attr');
 		var value = $(this).val();
-		console.log("val",value);
-		console.log("attrValue :", attrValue);
-		$(this).closest('td').next('td').find('input').val('1111');
+		var calculatedValue;
+		if(attrValue!='' && value!=''){
+			calculatedValue=attrValue*value;
+		$(this).closest('td').next('td').find('input').val(calculatedValue);
+		console.log("vall",value);
+		}else if(value==''){
+			$(this).closest('td').next('td').find('input').val('');
+		}
+		
 	
 	});
 	
