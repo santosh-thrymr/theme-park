@@ -3,6 +3,7 @@ package com.themepark.service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,7 @@ import com.themepark.dto.LoginDto;
 import com.themepark.dto.SingleEntryPassDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.enums.Gender;
+import com.themepark.enums.Role;
 import com.themepark.model.AnnualPass;
 import com.themepark.model.AppUser;
 import com.themepark.model.AppUserAnnualPass;
@@ -294,7 +296,12 @@ public class AppUserServiceImpl implements AppUserService {
 			return null;
 		}
 		
-		AppUser appUser = this.appUserRepository.findFirstByEmailAndPassword(loginDto.getEmail().trim(), loginDto.getPassword().trim());
+		AppUser appUser = this.appUserRepository.findFirstByEmailAndPasswordAndRoleIn(loginDto.getEmail().trim(),
+				loginDto.getPassword().trim(), new ArrayList<Role>() 
+		{{
+			add(Role.SUPER_ADMIN);
+			add(Role.USER);
+		}});
 		if (appUser == null) {
 			return null;
 		}
