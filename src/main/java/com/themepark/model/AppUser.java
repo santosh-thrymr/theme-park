@@ -46,13 +46,10 @@ public class AppUser extends BaseEntity implements Authentication {
 
 	private Integer phoneIntCallingCode;
 
-	@NotNull
 	private Long phoneNumber;
 
-	@NotNull
 	private Integer mobileIntCallingCode;
 
-	@NotNull
 	private Long mobileNumber;
 
 	private Date dob;
@@ -63,15 +60,12 @@ public class AppUser extends BaseEntity implements Authentication {
 	@Column(columnDefinition = "TEXT")
 	private String address;
 
-	@NotNull
 	private String countryOfResidence;
 
-	@NotNull
 	private String nationality;
 
 	private Long postalCode;
 
-	@NotNull
 	private String identityNumber;
 
 	private Float topup;
