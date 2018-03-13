@@ -15,7 +15,6 @@ import com.themepark.dto.EntryPackageDto;
 import com.themepark.dto.SingleEntryPassDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.enums.Gender;
-import com.themepark.enums.Role;
 import com.themepark.model.AnnualPass;
 import com.themepark.model.AppUser;
 import com.themepark.model.AppUserAnnualPass;
@@ -79,7 +78,6 @@ public class AppUserServiceImpl implements AppUserService {
         user.setLastName(registrationDto.getLastName());
         user.setEmail(registrationDto.getEmail());
         user.setDisplayName(registrationDto.getDisplayName());
-        user.setRole(Role.USER);
         
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			try {
@@ -114,25 +112,27 @@ public class AppUserServiceImpl implements AppUserService {
         user.setPostalCode(registrationDto.getPostalCode());
         user.setIdentityNumber(registrationDto.getIdentityNumber());
         
-       /* Float  amountToBePaid = 0F;
-        if (registrationDto.getNoOfChilds() != null) {
-	        	user.setNoOfChilds(registrationDto.getNoOfChilds());
-	        	amountToBePaid += registrationDto.getNoOfChilds() * 100F;
-	        	user.setAmountToBePaid(amountToBePaid);
-        }
-        if (registrationDto.getNoOfAdults() != null) {
-        		user.setNoOfAdults(registrationDto.getNoOfAdults());
-	        	amountToBePaid += registrationDto.getNoOfAdults() * 200F;
-	        	user.setAmountToBePaid(amountToBePaid);
-	    }*/
-        
-        
         user.setTopup(registrationDto.getTopup());
         
-        return userRepository.save(user);
+        AppUser appUser = userRepository.save(user);
+        
+        //Saving packages data
+        saveEntryPackages(appUser, registrationDto);
+        
+        //Saving Single entry pass data
+        saveSingleEntryPass(appUser, registrationDto);
+        
+        //Saving Annual pass data
+        saveAnnualPass(appUser, registrationDto);
+        
+        //Saving Big london admission fee data
+        saveBigLondonAdmissionFee(appUser, registrationDto);
+        
+        return appUser;
     }
     
 	private void saveEntryPackages(AppUser appUser, UserRegistrationDto registrationDto) {
+		Float totalAmountPaid = 0F;
 		for (EntryPackageDto dto : registrationDto.getEntryPackageDtos()) {
 			if (dto.getId() != null && dto.getSelectedCount() != null) {
 				EntryPackage entryPackage = this.entryPackageRepository.findOne(dto.getId());
@@ -148,13 +148,16 @@ public class AppUserServiceImpl implements AppUserService {
 				appUserEntryPackage.setSelectedCount(dto.getSelectedCount());
 				if (entryPackage.getPrice() != null) {
 					appUserEntryPackage.setPrice(dto.getSelectedCount() * entryPackage.getPrice());
+					totalAmountPaid += dto.getSelectedCount() * entryPackage.getPrice();
 				}
 				appUserEntryPackageRepository.save(appUserEntryPackage);
 			}
 		}
+		appUser.setTotalPaidForPackages(totalAmountPaid);
 	}
 
 	private void saveSingleEntryPass(AppUser appUser, UserRegistrationDto registrationDto) {
+		Float totalAmountPaid = 0F;
 		for (SingleEntryPassDto dto : registrationDto.getSingleEntryPassDtos()) {
 			if (dto.getId() != null && dto.getSelectedCount() != null) {
 				SingleEntryPass singleEntryPass = this.singleEntryPassRepository.findOne(dto.getId());
@@ -174,20 +177,25 @@ public class AppUserServiceImpl implements AppUserService {
 					appUserSingleEntryPass.setMyKidOrMyKadCount(dto.getSelectedCount());
 					if (singleEntryPass.getMyKadOrMyKidRate() != null) {
 						appUserSingleEntryPass.setPrice(dto.getSelectedCount() * singleEntryPass.getMyKadOrMyKidRate());
+						totalAmountPaid += dto.getSelectedCount() * singleEntryPass.getMyKadOrMyKidRate();
 					}
 				} else {
 					appUserSingleEntryPass.setStandardCount(dto.getSelectedCount());
 					if (singleEntryPass.getStandardRate() != null) {
 						appUserSingleEntryPass.setPrice(dto.getSelectedCount() * singleEntryPass.getStandardRate());
+						totalAmountPaid += dto.getSelectedCount() * singleEntryPass.getStandardRate();
 					}
 				}
 
 				this.appUserSingleEntryPassRepository.save(appUserSingleEntryPass);
 			}
 		}
+		
+		appUser.setTotalPaidForSingleEntryPass(totalAmountPaid);
 	}
 
 	private void saveAnnualPass(AppUser appUser, UserRegistrationDto registrationDto) {
+		Float totalAmountPaid = 0F;
 		for (AnnualPassDto dto : registrationDto.getAnnualPassDtos()) {
 			if (dto.getId() != null && dto.getSelectedCount() != null) {
 				AnnualPass annualPass = this.annualPassRepository.findOne(dto.getId());
@@ -203,14 +211,18 @@ public class AppUserServiceImpl implements AppUserService {
 
 				if (annualPass.getPrice() != null) {
 					appUserAnnualPass.setPrice(dto.getSelectedCount() * annualPass.getPrice());
+					totalAmountPaid += dto.getSelectedCount() * annualPass.getPrice();
 				}
 
 				this.appUserAnnualPassRepository.save(appUserAnnualPass);
 			}
 		}
+		
+		appUser.setTotalPaidForAnnualPass(totalAmountPaid);
 	}
 	
 	private void saveBigLondonAdmissionFee(AppUser appUser, UserRegistrationDto registrationDto) {
+		Float totalAmountPaid = 0F;
 		for (BigLondonAdmissionFeeDto dto : registrationDto.getBigLondonAdmissionFeeDtos()) {
 			if (dto.getId() != null) {
 				BigLondonAdmissionFee bigLondonAdmissionFee = this.blAdmissionFeeRepository.findOne(dto.getId());
@@ -232,10 +244,12 @@ public class AppUserServiceImpl implements AppUserService {
 						
 						if (bigLondonAdmissionFee.getAdultsMyKRate() != null) {
 							appUserBLAdmissionFee.setAdultsPrice(dto.getAdultSelectedCount() * bigLondonAdmissionFee.getAdultsMyKRate());
+							totalAmountPaid += dto.getAdultSelectedCount() * bigLondonAdmissionFee.getAdultsMyKRate();
 						}
 					} else {
 						if (bigLondonAdmissionFee.getAdultsStandardRate() != null) {
 							appUserBLAdmissionFee.setAdultsPrice(dto.getAdultSelectedCount() * bigLondonAdmissionFee.getAdultsStandardRate());
+							totalAmountPaid += dto.getAdultSelectedCount() * bigLondonAdmissionFee.getAdultsStandardRate();
 						}
 					}
 					
@@ -248,10 +262,12 @@ public class AppUserServiceImpl implements AppUserService {
 						
 						if (bigLondonAdmissionFee.getKidsOrSrCitizenMyKRate() != null) {
 							appUserBLAdmissionFee.setKidsOrSrCitizenPrice(dto.getKidsOrSrCitizenSelectedCount() * bigLondonAdmissionFee.getKidsOrSrCitizenMyKRate());
+							totalAmountPaid += dto.getKidsOrSrCitizenSelectedCount() * bigLondonAdmissionFee.getKidsOrSrCitizenMyKRate();
 						}
 					} else {
 						if (bigLondonAdmissionFee.getKidsOrSrCitizenStandardRate() != null) {
 							appUserBLAdmissionFee.setKidsOrSrCitizenPrice(dto.getKidsOrSrCitizenSelectedCount() * bigLondonAdmissionFee.getKidsOrSrCitizenStandardRate());
+							totalAmountPaid += dto.getKidsOrSrCitizenSelectedCount() * bigLondonAdmissionFee.getKidsOrSrCitizenStandardRate();
 						}
 					}
 					
@@ -259,6 +275,8 @@ public class AppUserServiceImpl implements AppUserService {
 				}
 			}
 		}
+		
+		appUser.setTotalPaidForBigLondonFee(totalAmountPaid);
 	}
 
     /*@Override

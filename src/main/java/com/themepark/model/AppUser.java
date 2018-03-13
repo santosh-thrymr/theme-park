@@ -32,17 +32,11 @@ public class AppUser extends BaseEntity {
 
 	private Boolean enableEmailUpdate;
 
-	public Integer getIntCallingCode() {
-		return intCallingCode;
-	}
-
-	public void setIntCallingCode(Integer intCallingCode) {
-		this.intCallingCode = intCallingCode;
-	}
-
-	private Integer intCallingCode;
+	private Integer phoneIntCallingCode;
 
 	private Long phoneNumber;
+
+	private Integer mobileIntCallingCode;
 
 	private Long mobileNumber;
 
@@ -147,12 +141,28 @@ public class AppUser extends BaseEntity {
 		this.enableEmailUpdate = enableEmailUpdate;
 	}
 
+	public Integer getPhoneIntCallingCode() {
+		return phoneIntCallingCode;
+	}
+
+	public void setPhoneIntCallingCode(Integer phoneIntCallingCode) {
+		this.phoneIntCallingCode = phoneIntCallingCode;
+	}
+
 	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
 	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Integer getMobileIntCallingCode() {
+		return mobileIntCallingCode;
+	}
+
+	public void setMobileIntCallingCode(Integer mobileIntCallingCode) {
+		this.mobileIntCallingCode = mobileIntCallingCode;
 	}
 
 	public Long getMobileNumber() {

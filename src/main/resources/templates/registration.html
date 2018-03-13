@@ -65,7 +65,7 @@
 												<div class="form-group customform-group row">
 											  	<label class="control-label col-md-12" for="">Phone number <span class="star-color">*</span></label>
 													<div class="col-md-5">
-								                          <select class="form-control" id="sel1">
+								                          <select class="form-control" id="sel1" th:field="*{phoneIntCallingCode}">
 								                             <option data-countryCode="GB" value="44" selected="selected">UK (+44)</option>
 															<option data-countryCode="US" value="1">USA (+1)</option>
 															<option data-countryCode="DZ" value="213">Algeria (+213)</option>
@@ -295,7 +295,7 @@
 												<div class="form-group customform-group row">
 											  	<label class="control-label col-md-12" for="">Mobile number <span class="star-color">*</span></label>
 													<div class="col-md-5">
-															 <select class="form-control" id="sel1" >
+															 <select class="form-control" id="sel1" th:field="*{mobileIntCallingCode}">
 																<option data-countryCode="GB" value="44" selected="selected">UK (+44)</option>
 																<option data-countryCode="US" value="1">USA (+1)</option>
 																<option data-countryCode="DZ" value="213">Algeria (+213)</option>
@@ -991,6 +991,12 @@
 												<div class="form-group customform-group">
 											  	<label class="control-label" for="">Identity proof/Passport No. <span class="star-color">*</span></label>
 													<textarea class="textclass form-control" placeholder="Identity proof/Passport No." th:field="*{identityNumber}"></textarea>
+											  </div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group customform-group">
+											  	<label class="control-label" for="">Topup </label>
+													<input type="text" class="input-class form-control" th:field="*{topup}"/>
 											  </div>
 											</div>
 									</div>

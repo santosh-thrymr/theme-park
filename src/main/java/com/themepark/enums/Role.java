@@ -1,5 +1,6 @@
 package com.themepark.enums;
 
 public enum Role {
-	USER
+	SUPER_ADMIN,
+	USER,
 }

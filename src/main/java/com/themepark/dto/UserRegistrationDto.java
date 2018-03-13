@@ -29,7 +29,11 @@ public class UserRegistrationDto {
 
 	private Boolean enableEmailUpdate;
 
+	private Integer phoneIntCallingCode;
+
 	private Long phoneNumber;
+
+	private Integer mobileIntCallingCode;
 
 	private Long mobileNumber;
 
@@ -107,12 +111,28 @@ public class UserRegistrationDto {
 		this.enableEmailUpdate = enableEmailUpdate;
 	}
 
+	public Integer getPhoneIntCallingCode() {
+		return phoneIntCallingCode;
+	}
+
+	public void setPhoneIntCallingCode(Integer phoneIntCallingCode) {
+		this.phoneIntCallingCode = phoneIntCallingCode;
+	}
+
 	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
 	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Integer getMobileIntCallingCode() {
+		return mobileIntCallingCode;
+	}
+
+	public void setMobileIntCallingCode(Integer mobileIntCallingCode) {
+		this.mobileIntCallingCode = mobileIntCallingCode;
 	}
 
 	public Long getMobileNumber() {
@@ -231,7 +251,8 @@ public class UserRegistrationDto {
 	public String toString() {
 		return "UserRegistrationDto [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", displayName=" + displayName + ", enableSmsUpdate=" + enableSmsUpdate + ", enableEmailUpdate="
-				+ enableEmailUpdate + ", phoneNumber=" + phoneNumber + ", mobileNumber=" + mobileNumber + ", dob=" + dob
+				+ enableEmailUpdate + ", phoneIntCallingCode=" + phoneIntCallingCode + ", phoneNumber=" + phoneNumber
+				+ ", mobileIntCallingCode=" + mobileIntCallingCode + ", mobileNumber=" + mobileNumber + ", dob=" + dob
 				+ ", gender=" + gender + ", address=" + address + ", countryOfResidence=" + countryOfResidence
 				+ ", nationality=" + nationality + ", postalCode=" + postalCode + ", identityNumber=" + identityNumber
 				+ ", topup=" + topup + ", amountToBePaid=" + amountToBePaid + ", entryPackageDtos=" + entryPackageDtos
