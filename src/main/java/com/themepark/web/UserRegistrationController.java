@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.themepark.Constants;
 import com.themepark.dto.UserRegistrationDto;
+import com.themepark.enums.PaymentMode;
 import com.themepark.model.AppUser;
 import com.themepark.repository.AnnualPassRepository;
-import com.themepark.repository.AppUserRepository;
 import com.themepark.repository.BLAdmissionFeeRepository;
 import com.themepark.repository.EntryPackageRepository;
 import com.themepark.repository.SingleEntryPassRepository;
@@ -39,9 +39,6 @@ public class UserRegistrationController implements AccessDeniedHandler {
 	@Autowired
 	private AppUserService userService;
 
-	@Autowired
-	private AppUserRepository appUserRepository;
-	
 	@Autowired
 	private EntryPackageRepository entryPackageRepository;
 	
@@ -64,8 +61,7 @@ public class UserRegistrationController implements AccessDeniedHandler {
 
 	@GetMapping
 	public String showRegistrationForm(Model model, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-		HttpSession httpSession = httpServletRequest.getSession();
-		AppUser appUser = this.appUserService.getLoggedInUser(httpSession.getAttribute("APP_USER_ID"));
+		AppUser appUser = this.appUserService.getLoggedInUser(httpServletRequest.getSession().getAttribute(Constants.LOGGED_IN_USER_ID));
 		if (appUser == null) {
 			return "redirect:/registration";
 		}
@@ -73,12 +69,14 @@ public class UserRegistrationController implements AccessDeniedHandler {
 		model.addAttribute("singleEntryPassList", this.singleEntryPassRepository.findAll());
 		model.addAttribute("annualPassList", this.annualPassRepository.findAll());
 		model.addAttribute("bigLondonAdmissionFeeList", this.blAdmissionFeeRepository.findAll());
+		model.addAttribute("paymentModes", PaymentMode.values());
 		return "registration";
 	}
 
 	@PostMapping
-	public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto,
-			BindingResult result, RedirectAttributes redirAttrs, @RequestPart("file") final MultipartFile multipartFile) {
+	public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto, BindingResult result,
+			RedirectAttributes redirAttrs, @RequestPart("file") final MultipartFile multipartFile,
+			HttpServletRequest httpServletRequest) {
 
 		System.out.println("userDto : " + userDto);
 		/*AppUser existing = userService.findByEmail(userDto.getEmail());
@@ -92,11 +90,18 @@ public class UserRegistrationController implements AccessDeniedHandler {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-		userService.save(userDto, multipartFile);
+		
+		userService.save(userDto, multipartFile, this.appUserService.getLoggedInUser(httpServletRequest.getSession().getAttribute(Constants.LOGGED_IN_USER_ID)));
 		redirAttrs.addFlashAttribute("message", "Form has been saved successfully.");
 		return "redirect:/registration";
 	}
 
+	@GetMapping(value="/get-reg-users")
+	public String getRegisteredUsers() {
+		
+		return "";
+	}
+	
 	@Override
 	public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException arg2)
 			throws IOException, ServletException {

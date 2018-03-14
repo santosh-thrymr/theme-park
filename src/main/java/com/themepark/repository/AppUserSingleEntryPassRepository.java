@@ -1,5 +1,7 @@
 package com.themepark.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ import com.themepark.model.SingleEntryPass;
 public interface AppUserSingleEntryPassRepository extends JpaRepository<AppUserSingleEntryPass, Long> {
 
 	AppUserSingleEntryPass findByAppUserAndSingleEntryPass(AppUser appUser, SingleEntryPass singleEntryPass);
+	
+	List<AppUserSingleEntryPass> findByAppUser(AppUser appUser);
 }

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import com.themepark.enums.Role;
 @Entity
 public class AppUser extends BaseEntity implements Authentication {
 
+	@NotNull
 	private String firstName;
 
 	private String lastName;
@@ -65,18 +67,12 @@ public class AppUser extends BaseEntity implements Authentication {
 	private String nationality;
 
 	private Long postalCode;
-
-	private String identityNumber;
-
-	private Float topup;
-
-	private Float totalPaidForPackages;
-
-	private Float totalPaidForSingleEntryPass;
-
-	private Float totalPaidForAnnualPass;
-
-	private Float totalPaidForBigLondonFee;
+	
+	@OneToOne
+	private RegistrationDetails registrationDetails;
+	
+	@OneToOne
+	private AppUser createdBy;
 
 	public AppUser() {
 	}
@@ -241,52 +237,20 @@ public class AppUser extends BaseEntity implements Authentication {
 		this.postalCode = postalCode;
 	}
 
-	public String getIdentityNumber() {
-		return identityNumber;
+	public RegistrationDetails getRegistrationDetails() {
+		return registrationDetails;
 	}
 
-	public void setIdentityNumber(String identityNumber) {
-		this.identityNumber = identityNumber;
+	public void setRegistrationDetails(RegistrationDetails registrationDetails) {
+		this.registrationDetails = registrationDetails;
 	}
 
-	public Float getTotalPaidForPackages() {
-		return totalPaidForPackages;
+	public AppUser getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setTotalPaidForPackages(Float totalPaidForPackages) {
-		this.totalPaidForPackages = totalPaidForPackages;
-	}
-
-	public Float getTotalPaidForSingleEntryPass() {
-		return totalPaidForSingleEntryPass;
-	}
-
-	public void setTotalPaidForSingleEntryPass(Float totalPaidForSingleEntryPass) {
-		this.totalPaidForSingleEntryPass = totalPaidForSingleEntryPass;
-	}
-
-	public Float getTotalPaidForAnnualPass() {
-		return totalPaidForAnnualPass;
-	}
-
-	public void setTotalPaidForAnnualPass(Float totalPaidForAnnualPass) {
-		this.totalPaidForAnnualPass = totalPaidForAnnualPass;
-	}
-
-	public Float getTotalPaidForBigLondonFee() {
-		return totalPaidForBigLondonFee;
-	}
-
-	public void setTotalPaidForBigLondonFee(Float totalPaidForBigLondonFee) {
-		this.totalPaidForBigLondonFee = totalPaidForBigLondonFee;
-	}
-
-	public Float getTopup() {
-		return topup;
-	}
-
-	public void setTopup(Float topup) {
-		this.topup = topup;
+	public void setCreatedBy(AppUser createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	@Override

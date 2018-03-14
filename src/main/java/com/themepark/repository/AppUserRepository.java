@@ -16,4 +16,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     AppUser findFirstByEmailAndPassword(String email, String password);
     
     AppUser findFirstByEmailAndPasswordAndRoleIn(String email, String password, List<Role> roles);
+    
+    AppUser findFirstByEmailAndPasswordAndRoleNot(String email, String password, Role role);
+    
+    List<AppUser> findByRole(Role role);
 }

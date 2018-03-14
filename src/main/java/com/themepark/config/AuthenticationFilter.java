@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.themepark.Constants;
 import com.themepark.model.AppUser;
 import com.themepark.service.AppUserService;
 
@@ -33,7 +34,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		System.out.println("  ---  url " + request.getRequestURL());
 
 		HttpSession httpSession = request.getSession();
-		Long appUserId = (Long) httpSession.getAttribute("APP_USER_ID");
+		Long appUserId = (Long) httpSession.getAttribute(Constants.LOGGED_IN_USER_ID);
 
 		try {
 			AppUser appUser = this.appUserService.getLoggedInUser(appUserId);

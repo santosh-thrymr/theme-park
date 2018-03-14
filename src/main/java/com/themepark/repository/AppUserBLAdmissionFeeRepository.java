@@ -1,5 +1,7 @@
 package com.themepark.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,6 @@ public interface AppUserBLAdmissionFeeRepository extends JpaRepository<AppUserBL
 
 	AppUserBLAdmissionFee findByAppUserAndBigLondonAdmissionFee(AppUser appUser,
 			BigLondonAdmissionFee bigLondonAdmissionFee);
+	
+	List<AppUserBLAdmissionFee> findByAppUser(AppUser appUser);
 }

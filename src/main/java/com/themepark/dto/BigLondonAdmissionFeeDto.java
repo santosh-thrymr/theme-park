@@ -1,9 +1,20 @@
 package com.themepark.dto;
 
 public class BigLondonAdmissionFeeDto {
+
 	private Long id;
+
 	private Integer adultSelectedCount;
+
 	private Integer kidsOrSrCitizenSelectedCount;
+
+	private String type;
+
+	private String description;
+	
+	private Float adultPrice;
+	
+	private Float kidsOrSrCitizenPrice;
 
 	public Long getId() {
 		return id;
@@ -27,6 +38,38 @@ public class BigLondonAdmissionFeeDto {
 
 	public void setKidsOrSrCitizenSelectedCount(Integer kidsOrSrCitizenSelectedCount) {
 		this.kidsOrSrCitizenSelectedCount = kidsOrSrCitizenSelectedCount;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Float getAdultPrice() {
+		return adultPrice;
+	}
+
+	public void setAdultPrice(Float adultPrice) {
+		this.adultPrice = adultPrice;
+	}
+
+	public Float getKidsOrSrCitizenPrice() {
+		return kidsOrSrCitizenPrice;
+	}
+
+	public void setKidsOrSrCitizenPrice(Float kidsOrSrCitizenPrice) {
+		this.kidsOrSrCitizenPrice = kidsOrSrCitizenPrice;
 	}
 
 	@Override

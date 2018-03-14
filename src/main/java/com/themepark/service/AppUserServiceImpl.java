@@ -1,9 +1,12 @@
 package com.themepark.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.themepark.Constants;
 import com.themepark.dto.AnnualPassDto;
 import com.themepark.dto.BigLondonAdmissionFeeDto;
 import com.themepark.dto.EntryPackageDto;
@@ -19,6 +23,7 @@ import com.themepark.dto.LoginDto;
 import com.themepark.dto.SingleEntryPassDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.enums.Gender;
+import com.themepark.enums.PaymentMode;
 import com.themepark.enums.Role;
 import com.themepark.model.AnnualPass;
 import com.themepark.model.AppUser;
@@ -28,6 +33,7 @@ import com.themepark.model.AppUserEntryPackage;
 import com.themepark.model.AppUserSingleEntryPass;
 import com.themepark.model.BigLondonAdmissionFee;
 import com.themepark.model.EntryPackage;
+import com.themepark.model.RegistrationDetails;
 import com.themepark.model.SingleEntryPass;
 import com.themepark.repository.AnnualPassRepository;
 import com.themepark.repository.AppUserAnnualPassRepository;
@@ -37,6 +43,7 @@ import com.themepark.repository.AppUserRepository;
 import com.themepark.repository.AppUserSingleEntryPassRepository;
 import com.themepark.repository.BLAdmissionFeeRepository;
 import com.themepark.repository.EntryPackageRepository;
+import com.themepark.repository.RegistrationDetailsRepository;
 import com.themepark.repository.SingleEntryPassRepository;
 
 @Service
@@ -68,6 +75,9 @@ public class AppUserServiceImpl implements AppUserService {
     
     @Autowired
     private AppUserBLAdmissionFeeRepository appUserBLAdmissionFeeRepository;
+    
+    @Autowired
+    private RegistrationDetailsRepository registrationDetailsRepository;
 
     /*@Autowired
     private BCryptPasswordEncoder passwordEncoder;*/
@@ -77,7 +87,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Transactional
-    public AppUser save(UserRegistrationDto registrationDto, MultipartFile multipartFile){
+    public AppUser save(UserRegistrationDto registrationDto, MultipartFile multipartFile, AppUser createdBy){
         AppUser user = new AppUser();
         
         user.setFirstName(registrationDto.getFirstName());
@@ -102,6 +112,7 @@ public class AppUserServiceImpl implements AppUserService {
         user.setPhoneNumber(registrationDto.getPhoneNumber());
         user.setMobileIntCallingCode(registrationDto.getMobileIntCallingCode());
         user.setMobileNumber(registrationDto.getMobileNumber());
+        user.setRole(Role.CUSTOMER);
         
 		if (!StringUtils.isEmpty(registrationDto.getDob())) {
 			try {
@@ -120,10 +131,26 @@ public class AppUserServiceImpl implements AppUserService {
         user.setCountryOfResidence(registrationDto.getCountryOfResidence());
         user.setNationality(registrationDto.getNationality());
         user.setPostalCode(registrationDto.getPostalCode());
-        user.setIdentityNumber(registrationDto.getIdentityNumber());
+
+        if (createdBy != null) {
+        		user.setCreatedBy(createdBy);
+        }
         
-        user.setTopup(registrationDto.getTopup());
+        RegistrationDetails registrationDetails = new RegistrationDetails();
+        registrationDetails.setIdentityNumber(registrationDto.getIdentityNumber());
+        registrationDetails.setTopup(registrationDto.getTopup());
         
+        if (!StringUtils.isEmpty(registrationDto.getPaymentMode())) {
+			registrationDetails.setPaymentMode(PaymentMode.valueOf(registrationDto.getPaymentMode()));
+			if (registrationDetails.getPaymentMode().equals(PaymentMode.OTHERS)) {
+				registrationDetails.setOtherPayment(registrationDto.getOtherPayment());
+			}
+			
+			registrationDetails.setPaymentDate(new Date());
+        }
+        this.registrationDetailsRepository.save(registrationDetails);
+        user.setRegistrationDetails(registrationDetails);
+
         AppUser appUser = appUserRepository.save(user);
         
         //Saving packages data
@@ -165,7 +192,17 @@ public class AppUserServiceImpl implements AppUserService {
 				appUserEntryPackageRepository.save(appUserEntryPackage);
 			}
 		}
-		appUser.setTotalPaidForPackages(totalAmountPaid);
+		
+		RegistrationDetails details = appUser.getRegistrationDetails();
+		if (details != null) {
+			details.setTotalPaidForPackages(totalAmountPaid);
+
+			if (details.getTotalPaid() != null) {
+				details.setTotalPaid(details.getTotalPaid() + totalAmountPaid);
+			} else {
+				details.setTotalPaid(totalAmountPaid);
+			}
+		}
 	}
 
 	private void saveSingleEntryPass(AppUser appUser, UserRegistrationDto registrationDto) {
@@ -184,7 +221,7 @@ public class AppUserServiceImpl implements AppUserService {
 				appUserSingleEntryPass.setSingleEntryPass(singleEntryPass);
 
 				if (!StringUtils.isEmpty(registrationDto.getNationality())
-						&& registrationDto.getNationality().equals("malaysian")) {
+						&& registrationDto.getNationality().equals(Constants.MALAYSIAN)) {
 
 					appUserSingleEntryPass.setMyKidOrMyKadCount(dto.getSelectedCount());
 					if (singleEntryPass.getMyKadOrMyKidRate() != null) {
@@ -203,7 +240,16 @@ public class AppUserServiceImpl implements AppUserService {
 			}
 		}
 		
-		appUser.setTotalPaidForSingleEntryPass(totalAmountPaid);
+		RegistrationDetails details = appUser.getRegistrationDetails();
+		if (details != null) {
+			details.setTotalPaidForSingleEntryPass(totalAmountPaid);
+
+			if (details.getTotalPaid() != null) {
+				details.setTotalPaid(details.getTotalPaid() + totalAmountPaid);
+			} else {
+				details.setTotalPaid(totalAmountPaid);
+			}
+		}
 	}
 
 	private void saveAnnualPass(AppUser appUser, UserRegistrationDto registrationDto) {
@@ -230,7 +276,16 @@ public class AppUserServiceImpl implements AppUserService {
 			}
 		}
 		
-		appUser.setTotalPaidForAnnualPass(totalAmountPaid);
+		RegistrationDetails details = appUser.getRegistrationDetails();
+		if (details != null) {
+			details.setTotalPaidForAnnualPass(totalAmountPaid);
+
+			if (details.getTotalPaid() != null) {
+				details.setTotalPaid(details.getTotalPaid() + totalAmountPaid);
+			} else {
+				details.setTotalPaid(totalAmountPaid);
+			}
+		}
 	}
 	
 	private void saveBigLondonAdmissionFee(AppUser appUser, UserRegistrationDto registrationDto) {
@@ -252,7 +307,7 @@ public class AppUserServiceImpl implements AppUserService {
 				if (dto.getAdultSelectedCount() != null) {
 					appUserBLAdmissionFee.setAdultSelectedCount(dto.getAdultSelectedCount());
 					if (!StringUtils.isEmpty(registrationDto.getNationality())
-							&& registrationDto.getNationality().equals("malaysian")) {
+							&& registrationDto.getNationality().equals(Constants.MALAYSIAN)) {
 						
 						if (bigLondonAdmissionFee.getAdultsMyKRate() != null) {
 							appUserBLAdmissionFee.setAdultsPrice(dto.getAdultSelectedCount() * bigLondonAdmissionFee.getAdultsMyKRate());
@@ -271,7 +326,7 @@ public class AppUserServiceImpl implements AppUserService {
 					appUserBLAdmissionFee.setKidsOrSrCitizenSelectedCount(dto.getKidsOrSrCitizenSelectedCount());
 					
 					if (!StringUtils.isEmpty(registrationDto.getNationality())
-							&& registrationDto.getNationality().equals("malaysian")) {
+							&& registrationDto.getNationality().equals(Constants.MALAYSIAN)) {
 						
 						if (bigLondonAdmissionFee.getKidsOrSrCitizenMyKRate() != null) {
 							appUserBLAdmissionFee.setKidsOrSrCitizenPrice(dto.getKidsOrSrCitizenSelectedCount() * bigLondonAdmissionFee.getKidsOrSrCitizenMyKRate());
@@ -289,7 +344,16 @@ public class AppUserServiceImpl implements AppUserService {
 			}
 		}
 		
-		appUser.setTotalPaidForBigLondonFee(totalAmountPaid);
+		RegistrationDetails details = appUser.getRegistrationDetails();
+		if (details != null) {
+			details.setTotalPaidForBigLondonFee(totalAmountPaid);
+
+			if (details.getTotalPaid() != null) {
+				details.setTotalPaid(details.getTotalPaid() + totalAmountPaid);
+			} else {
+				details.setTotalPaid(totalAmountPaid);
+			}
+		}
 	}
 
 	@Override
@@ -298,12 +362,8 @@ public class AppUserServiceImpl implements AppUserService {
 			return null;
 		}
 		
-		AppUser appUser = this.appUserRepository.findFirstByEmailAndPasswordAndRoleIn(loginDto.getEmail().trim(),
-				loginDto.getPassword().trim(), new ArrayList<Role>() 
-		{{
-			add(Role.SUPER_ADMIN);
-			add(Role.USER);
-		}});
+		AppUser appUser = this.appUserRepository.findFirstByEmailAndPasswordAndRoleNot(loginDto.getEmail().trim(),
+				loginDto.getPassword().trim(), Role.CUSTOMER);
 		if (appUser == null) {
 			return null;
 		}
@@ -319,6 +379,152 @@ public class AppUserServiceImpl implements AppUserService {
 		Long appUserIdStr = (Long) appUserId;
 
 		return this.appUserRepository.findOne(appUserIdStr);
+	}
+	
+	@Override
+	public List<UserRegistrationDto> getRegisteredUsers() {
+		return mapRegisteredUsers(this.appUserRepository.findByRole(Role.CUSTOMER));
+	}
+	
+	@Override
+	public List<UserRegistrationDto> mapRegisteredUsers(List<AppUser> appUsers) {
+		List<UserRegistrationDto> registrationDtos = new ArrayList<>();
+		DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		for (AppUser appUser : appUsers) {
+			UserRegistrationDto registrationDto = new UserRegistrationDto();
+			
+			registrationDto.setId(appUser.getId());
+			registrationDto.setFirstName(appUser.getFirstName());
+			registrationDto.setLastName(appUser.getLastName());
+			registrationDto.setEmail(appUser.getEmail());
+			registrationDto.setDisplayName(appUser.getDisplayName());
+			registrationDto.setEnableEmailUpdate(appUser.getEnableEmailUpdate());
+			registrationDto.setEnableSmsUpdate(appUser.getEnableSmsUpdate());
+			registrationDto.setPhoneIntCallingCode(appUser.getPhoneIntCallingCode());
+			registrationDto.setPhoneNumber(appUser.getPhoneNumber());
+			registrationDto.setMobileIntCallingCode(appUser.getMobileIntCallingCode());
+			registrationDto.setMobileNumber(appUser.getMobileNumber());
+			if (appUser.getDob() != null) {
+				registrationDto.setDob(formatter.format(appUser.getDob()));
+			}
+			registrationDto.setGender(appUser.getGender() != null ? appUser.getGender().name() : "");
+			registrationDto.setAddress(appUser.getAddress());
+			registrationDto.setCountryOfResidence(appUser.getCountryOfResidence());
+			registrationDto.setNationality(appUser.getNationality());
+			
+			AppUser createdBy = appUser.getCreatedBy();
+			if (createdBy != null) {
+				registrationDto.setCreatedById(createdBy.getId());
+				registrationDto.setCreatedByName(createdBy.getFirstName());
+				registrationDto.setCreatedByEmail(createdBy.getEmail());
+			}
+			
+			RegistrationDetails details = appUser.getRegistrationDetails();
+			if (details != null) {
+				registrationDto.setIdentityNumber(details.getIdentityNumber());
+				registrationDto.setTotalPaidForPackages(details.getTotalPaidForPackages());
+				registrationDto.setTotalPaidForSingleEntryPass(details.getTotalPaidForSingleEntryPass());
+				registrationDto.setTotalPaidForAnnualPass(details.getTotalPaidForAnnualPass());
+				registrationDto.setTotalPaidForBigLondonFee(details.getTotalPaidForBigLondonFee());
+				registrationDto.setTotalPaid(details.getTotalPaid());
+			}
+			
+			registrationDto.setEntryPackageDtos(mapEntryPackageDtos(this.appUserEntryPackageRepository.findByAppUser(appUser)));
+			registrationDto.setSingleEntryPassDtos(mapSingleEntryPassDtos(this.appUserSingleEntryPassRepository.findByAppUser(appUser)));
+			registrationDto.setAnnualPassDtos(mapAnnualPassDtos(this.appUserAnnualPassRepository.findByAppUser(appUser)));
+			registrationDto.setBigLondonAdmissionFeeDtos(mapBigLondonAdmissionFeeDtos(this.appUserBLAdmissionFeeRepository.findByAppUser(appUser)));
+			
+			registrationDtos.add(registrationDto);
+		}
+		
+		return registrationDtos;
+	}
+	
+	private List<EntryPackageDto> mapEntryPackageDtos(List<AppUserEntryPackage>  appUserEntryPackages) {
+		List<EntryPackageDto> entryPackageDtos = new ArrayList<>();
+		
+		for(AppUserEntryPackage appUserEntryPackage : appUserEntryPackages) {
+			EntryPackageDto dto = new EntryPackageDto();
+			EntryPackage entryPackage = appUserEntryPackage.getEntryPackage();
+			
+			if (entryPackage != null) {
+				dto.setName(entryPackage.getName());
+				dto.setDescription(entryPackage.getDescription());
+				dto.setSelectedCount(appUserEntryPackage.getSelectedCount());
+				dto.setPrice(appUserEntryPackage.getPrice());
+				entryPackageDtos.add(dto);
+			}
+		}
+		
+		return entryPackageDtos;
+	}
+	
+	private List<SingleEntryPassDto> mapSingleEntryPassDtos(List<AppUserSingleEntryPass> appUserSingleEntryPasses) {
+		List<SingleEntryPassDto> singleEntryPassDtos = new ArrayList<>();
+		
+		for (AppUserSingleEntryPass appUserSingleEntryPass : appUserSingleEntryPasses) {
+			SingleEntryPassDto dto = new SingleEntryPassDto();
+			SingleEntryPass entryPass = appUserSingleEntryPass.getSingleEntryPass();
+			
+			if (entryPass != null) {
+				dto.setType(entryPass.getType());
+				dto.setDescription(entryPass.getDescription());
+				if (appUserSingleEntryPass.getAppUser().getNationality().equals(Constants.MALAYSIAN)) {
+					dto.setSelectedCount(appUserSingleEntryPass.getMyKidOrMyKadCount());
+				} else {
+					dto.setSelectedCount(appUserSingleEntryPass.getStandardCount());
+				}
+				dto.setPrice(appUserSingleEntryPass.getPrice());
+				
+				singleEntryPassDtos.add(dto);
+			}
+		}
+		
+		return singleEntryPassDtos;
+	}
+	
+	private List<AnnualPassDto> mapAnnualPassDtos(List<AppUserAnnualPass> appUserAnnualPasses) {
+		List<AnnualPassDto> annualPassDtos = new ArrayList<>();
+		
+		for (AppUserAnnualPass appUserAnnualPass : appUserAnnualPasses) {
+			AnnualPassDto dto = new AnnualPassDto();
+			AnnualPass annualPass = appUserAnnualPass.getAnnualPass();
+			
+			if (annualPass != null) {
+				dto.setType(annualPass.getType());
+				dto.setDescription(annualPass.getDescription());
+				dto.setSelectedCount(appUserAnnualPass.getSelectedCount());
+				dto.setPrice(appUserAnnualPass.getPrice());
+				
+				annualPassDtos.add(dto);
+			}
+		}
+		
+		return annualPassDtos;
+	}
+	
+	private List<BigLondonAdmissionFeeDto> mapBigLondonAdmissionFeeDtos(List<AppUserBLAdmissionFee> appUserBigLondonAdmissionFees) {
+		List<BigLondonAdmissionFeeDto> bigLondonAdmissionFeeDtos = new ArrayList<>();
+		
+		for (AppUserBLAdmissionFee appUserBLAdmissionFee : appUserBigLondonAdmissionFees) {
+			BigLondonAdmissionFeeDto dto = new BigLondonAdmissionFeeDto();
+			BigLondonAdmissionFee bigLondonAdmissionFee = appUserBLAdmissionFee.getBigLondonAdmissionFee();
+			
+			if (bigLondonAdmissionFee != null) {
+				dto.setType(bigLondonAdmissionFee.getType());
+				dto.setDescription(bigLondonAdmissionFee.getDescription());
+				dto.setAdultSelectedCount(appUserBLAdmissionFee.getAdultSelectedCount());
+				dto.setAdultPrice(appUserBLAdmissionFee.getAdultsPrice());
+				dto.setKidsOrSrCitizenSelectedCount(appUserBLAdmissionFee.getKidsOrSrCitizenSelectedCount());
+				dto.setKidsOrSrCitizenPrice(appUserBLAdmissionFee.getKidsOrSrCitizenPrice());
+				
+				bigLondonAdmissionFeeDtos.add(dto);
+				/*if (appUserBLAdmissionFee.getAppUser().getNationality().equals(Constants.MALAYSIAN)) {
+				}*/
+			}
+		}
+		
+		return bigLondonAdmissionFeeDtos;
 	}
 
     /*@Override

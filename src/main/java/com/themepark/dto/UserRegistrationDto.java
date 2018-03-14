@@ -15,6 +15,8 @@ import lombok.Data;
 @Data
 public class UserRegistrationDto {
 
+	private Long id;
+
 	private String firstName;
 
 	private String lastName;
@@ -60,6 +62,34 @@ public class UserRegistrationDto {
 	private List<AnnualPassDto> annualPassDtos = new ArrayList<>();
 
 	private List<BigLondonAdmissionFeeDto> bigLondonAdmissionFeeDtos = new ArrayList<>();
+	
+	private String paymentMode;
+	
+	private String otherPayment;
+	
+	private Long createdById;
+	
+	private String createdByName;
+	
+	private String createdByEmail;
+	
+	private Float totalPaidForPackages;
+
+	private Float totalPaidForSingleEntryPass;
+
+	private Float totalPaidForAnnualPass;
+
+	private Float totalPaidForBigLondonFee;
+
+	private Float totalPaid;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -237,16 +267,97 @@ public class UserRegistrationDto {
 		this.bigLondonAdmissionFeeDtos = bigLondonAdmissionFeeDtos;
 	}
 
+	public String getPaymentMode() {
+		return paymentMode;
+	}
+
+	public void setPaymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
+	}
+
+	public String getOtherPayment() {
+		return otherPayment;
+	}
+
+	public void setOtherPayment(String otherPayment) {
+		this.otherPayment = otherPayment;
+	}
+
+	public Long getCreatedById() {
+		return createdById;
+	}
+
+	public void setCreatedById(Long createdById) {
+		this.createdById = createdById;
+	}
+
+	public String getCreatedByName() {
+		return createdByName;
+	}
+
+	public void setCreatedByName(String createdByName) {
+		this.createdByName = createdByName;
+	}
+
+	public String getCreatedByEmail() {
+		return createdByEmail;
+	}
+
+	public void setCreatedByEmail(String createdByEmail) {
+		this.createdByEmail = createdByEmail;
+	}
+
+	public Float getTotalPaidForPackages() {
+		return totalPaidForPackages;
+	}
+
+	public void setTotalPaidForPackages(Float totalPaidForPackages) {
+		this.totalPaidForPackages = totalPaidForPackages;
+	}
+
+	public Float getTotalPaidForSingleEntryPass() {
+		return totalPaidForSingleEntryPass;
+	}
+
+	public void setTotalPaidForSingleEntryPass(Float totalPaidForSingleEntryPass) {
+		this.totalPaidForSingleEntryPass = totalPaidForSingleEntryPass;
+	}
+
+	public Float getTotalPaidForAnnualPass() {
+		return totalPaidForAnnualPass;
+	}
+
+	public void setTotalPaidForAnnualPass(Float totalPaidForAnnualPass) {
+		this.totalPaidForAnnualPass = totalPaidForAnnualPass;
+	}
+
+	public Float getTotalPaidForBigLondonFee() {
+		return totalPaidForBigLondonFee;
+	}
+
+	public void setTotalPaidForBigLondonFee(Float totalPaidForBigLondonFee) {
+		this.totalPaidForBigLondonFee = totalPaidForBigLondonFee;
+	}
+
+	public Float getTotalPaid() {
+		return totalPaid;
+	}
+
+	public void setTotalPaid(Float totalPaid) {
+		this.totalPaid = totalPaid;
+	}
+
 	@Override
 	public String toString() {
-		return "UserRegistrationDto [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", displayName=" + displayName + ", enableSmsUpdate=" + enableSmsUpdate + ", enableEmailUpdate="
-				+ enableEmailUpdate + ", phoneIntCallingCode=" + phoneIntCallingCode + ", phoneNumber=" + phoneNumber
-				+ ", mobileIntCallingCode=" + mobileIntCallingCode + ", mobileNumber=" + mobileNumber + ", dob=" + dob
-				+ ", gender=" + gender + ", address=" + address + ", countryOfResidence=" + countryOfResidence
-				+ ", nationality=" + nationality + ", postalCode=" + postalCode + ", identityNumber=" + identityNumber
-				+ ", topup=" + topup + ", entryPackageDtos=" + entryPackageDtos
-				+ ", singleEntryPassDtos=" + singleEntryPassDtos + ", annualPassDtos=" + annualPassDtos
-				+ ", bigLondonAdmissionFeeDtos=" + bigLondonAdmissionFeeDtos + "]";
+		return "UserRegistrationDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
+				+ email + ", displayName=" + displayName + ", enableSmsUpdate=" + enableSmsUpdate
+				+ ", enableEmailUpdate=" + enableEmailUpdate + ", phoneIntCallingCode=" + phoneIntCallingCode
+				+ ", phoneNumber=" + phoneNumber + ", mobileIntCallingCode=" + mobileIntCallingCode + ", mobileNumber="
+				+ mobileNumber + ", dob=" + dob + ", gender=" + gender + ", address=" + address
+				+ ", countryOfResidence=" + countryOfResidence + ", nationality=" + nationality + ", postalCode="
+				+ postalCode + ", identityNumber=" + identityNumber + ", topup=" + topup + ", entryPackageDtos="
+				+ entryPackageDtos + ", singleEntryPassDtos=" + singleEntryPassDtos + ", annualPassDtos="
+				+ annualPassDtos + ", bigLondonAdmissionFeeDtos=" + bigLondonAdmissionFeeDtos + ", paymentMode="
+				+ paymentMode + "]";
 	}
 }
