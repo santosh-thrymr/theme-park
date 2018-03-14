@@ -1,0 +1,179 @@
+.pwidth {
+	width: 150px;
+	margin-left: 20px;
+}
+/* The switch - the box around the slider */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+}
+
+.footer {
+	background-color: #f1f1f1;
+	padding-top: 35px;
+	margin-top: 30px;
+}
+/* Hide default HTML checkbox */
+.switch input {
+	display: none;
+}
+/* The slider */
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	font-family: 'Glyphicons Halflings';
+	content: "\e013" !important;
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	color: green;
+	-webkit-transition: .4s;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
+}
+
+.pwidth2 {
+	width: 200px;
+	margin-left: 20px;
+}
+
+.martop10 {
+	margin-top: 20px;
+}
+
+.martop20 {
+	margin-top: 30px;
+}
+
+.width50 {
+	margin-left: -5px;
+	width: 100px;
+}
+
+.margleft10 {
+	margin-left: -15px !important;
+}
+
+.marginleft100 {
+	margin-left: 257px;
+}
+
+.textclass {
+	width: 86%;
+	margin-left: -37px;
+}
+
+.width100 {
+	margin-left: -5px;
+	width: 150px;
+}
+
+.height100 {
+	border: 1px solid #f4a682;
+	height: 100px;
+	margin-left: 15px;
+}
+
+.marg10 {
+	margin-left: 10px;
+}
+
+.pro-pic {
+	height: 100%;
+	width: 136%;
+	margin-left: -14px;
+}
+
+.text-align {
+	text-align: center !important;
+}
+
+.input-class {
+	width: 100%;
+}
+
+.header {
+	font-size: 18px;
+	font-weight: 500px;
+	padding-top: 35px;
+	background-color: #addad8;
+	margin-left: 0px;
+}
+
+.main-body {
+	overflow-x: hidden !important;
+}
+
+.phone {
+	height: 33px;
+	margin-left: -24px;
+	padding-right: 30px !important;
+}
+
+.mandatory {
+	color: red;
+}
+
+body {
+	font-family: Arial, Sans-Serif;
+}
+/* Nicely lines up the labels. */
+form label {
+	display: inline-block;
+	width: 140px;
+}
+/* You could add a class to all the input boxes instead, if you like. That would be safer, and more backwards-compatible */
+/*form input[type="text"], form input[type="password"], form input[type="email"] {
+ width:160px;
+}
+form .line {
+ clear:both;
+}
+form .line.submit {
+ text-align:right;
+}
+*/
+.select-file {
+	width: 45%;
+}
+
+.tobe-paid {
+	color: blue;
+}
+
+#my_file {
+	display: none;
+}
+
+.register {
+	margin-top: 50px;
+	font-size: 20px;
+}

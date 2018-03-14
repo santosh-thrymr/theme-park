@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head lang="en" th:replace="fragments/header :: head-tag">
+	</head>
+	<body>
+		<div th:replace="fragments/header :: header"></div>
+		<div class="register">
+			<a href="" th:href="@{/registration}">Register here</a>
+			<a href="" class="btn btn-success pull-right login-btn" th:href="@{/logout}"> Logout </a>
+		</div>
+	</body>
+</html>
