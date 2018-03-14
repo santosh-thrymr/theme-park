@@ -22,9 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.themepark.Constants;
 import com.themepark.dto.LoginDto;
+import com.themepark.enums.Role;
 import com.themepark.model.AppUser;
 import com.themepark.repository.AppUserRepository;
 import com.themepark.service.AppUserService;
+
 
 @Controller
 public class MainController {
@@ -41,16 +43,38 @@ public class MainController {
 	}
 
 	@GetMapping("/")
-	public String loginForm(HttpServletRequest request, HttpServletResponse response) {
+	public String loginForm(Model model, HttpServletRequest request, HttpServletResponse response) {
 		HttpSession httpSession = request.getSession();
 		AppUser appUser = this.appUserService.getLoggedInUser(httpSession.getAttribute(Constants.LOGGED_IN_USER_ID));
 		if (appUser != null) {
+			if (appUser.getRole().equals(Role.SUPER_ADMIN)) {
+				model.addAttribute("registeredUsers", this.appUserService.getRegisteredUsers());
+			}
 			return "index";
 		}
 		
 		return "login";
 	}
 
+	@GetMapping("/login")
+	public String loginPage(Model model,
+			RedirectAttributes redirAttrs, HttpServletRequest httpServletRequest) {
+		AppUser appUser = this.appUserService.getLoggedInUser(httpServletRequest.getSession().getAttribute(Constants.LOGGED_IN_USER_ID));
+		if (appUser == null) {
+			redirAttrs.addFlashAttribute("loginError", "Please login to access.");
+			return "redirect:/";
+		}
+		
+		HttpSession httpSession = httpServletRequest.getSession();
+		httpSession.setAttribute(Constants.LOGGED_IN_USER_ID, appUser.getId());
+		
+		if (appUser.getRole().equals(Role.SUPER_ADMIN)) {
+			model.addAttribute("registeredUsers", this.appUserService.getRegisteredUsers());
+		}
+		
+		return "index";
+	}
+	
 	@PostMapping("/login")
 	public String login(Model model, @ModelAttribute("login") @Valid LoginDto loginDto, BindingResult result,
 			RedirectAttributes redirAttrs, HttpServletRequest request, HttpServletResponse response) {
@@ -64,7 +88,9 @@ public class MainController {
 		HttpSession httpSession = request.getSession();
 		httpSession.setAttribute(Constants.LOGGED_IN_USER_ID, appUser.getId());
 		
-		model.addAttribute("registeredUsers", this.appUserService.getRegisteredUsers());
+		if (appUser.getRole().equals(Role.SUPER_ADMIN)) {
+			model.addAttribute("registeredUsers", this.appUserService.getRegisteredUsers());
+		}
 		
 		return "index";
 	}

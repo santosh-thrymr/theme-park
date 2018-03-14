@@ -1,13 +1,20 @@
 package com.themepark.web;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Controller;
@@ -16,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.themepark.Constants;
+import com.themepark.ReportGenerator;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.enums.PaymentMode;
 import com.themepark.model.AppUser;
@@ -96,10 +105,17 @@ public class UserRegistrationController implements AccessDeniedHandler {
 		return "redirect:/registration";
 	}
 
-	@GetMapping(value="/get-reg-users")
-	public String getRegisteredUsers() {
-		
-		return "";
+	@GetMapping("/get-reg-pdf/{id}/{type}")
+	public HttpEntity<byte[]> getRegisteredUsers(@PathVariable("id") Long id, @PathVariable("type") String type,
+			HttpServletResponse httpServletResponse) throws Exception {
+		File generatedFile = new ReportGenerator().generatePdfReport(this.appUserService.generateReportBean(id));
+		final InputStream is = new FileInputStream(generatedFile);
+		final String contentType = "application/pdf";
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.valueOf(contentType));
+		httpServletResponse.setHeader("Content-Disposition", type+"; filename=" + generatedFile.getName());
+		generatedFile.delete();
+		return new HttpEntity<byte[]>(IOUtils.toByteArray(is), headers);
 	}
 	
 	@Override

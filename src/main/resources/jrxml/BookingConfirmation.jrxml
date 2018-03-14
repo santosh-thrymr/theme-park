@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-03-14T22:58:11 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3b09722e-0a51-4f46-bcb7-7f213ee9799a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="imagePath" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="bookingDate" class="java.lang.String"/>
+	<field name="packageDetails" class="java.lang.String"/>
+	<field name="totalAmount" class="java.math.BigDecimal"/>
+	<field name="guestName" class="java.lang.String"/>
+	<field name="guestId" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="mobile" class="java.lang.String"/>
+	<field name="paymentDate" class="java.lang.String"/>
+	<field name="paymentMethod" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="35" width="460" height="30" uuid="6fddfc90-4470-4ab9-a276-1a9ddfd1dad1">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Booking Confirmation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="65" width="460" height="15" forecolor="#707070" uuid="5f15e4fc-9795-405f-b167-ff36cc70ac32">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MCM Studio Entertainment Sdn Bhd]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="90" width="555" height="1" uuid="29b47581-214f-4eff-8a7c-941e1b307177">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+			</line>
+			<image>
+				<reportElement x="460" y="0" width="80" height="80" uuid="6db97f18-a8ca-4808-acea-2842b54246e5">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{imagePath}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="285">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="15" uuid="b4f242d0-9c7e-4aad-8f23-30a06af378fa">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Congratulations! Your booking is confirmed. ]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="25" width="555" height="80" isPrintWhenDetailOverflows="true" uuid="655c35e3-7ff0-45b1-a655-2fcd4db53869">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20" uuid="e423c074-70b8-4c3b-beb2-156155b89400">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<text><![CDATA[BOOKING SUMMARY]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="120" height="20" uuid="5e626dd7-71a6-4f36-b3f1-006c60be17d5">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Booking Date]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="120" y="20" width="435" height="20" uuid="2e9b1fc0-3cff-416f-98db-c7374220688b"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{bookingDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="60" width="120" height="20" uuid="2105e1fa-eed1-4628-943a-93960722725f">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Total Amount 	]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="60" width="435" height="20" uuid="d094e48a-1868-4832-b64e-a46b91c43302"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{totalAmount}]]></textFieldExpression>
+				</textField>
+				<frame>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="40" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="5fc14034-633b-4a44-9d6c-5bbc99828362"/>
+					<staticText>
+						<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="120" height="20" uuid="1e4b8073-4744-4ab8-822f-5f909e5e7448">
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						</reportElement>
+						<box leftPadding="2"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="Arial"/>
+						</textElement>
+						<text><![CDATA[Purchase Details]]></text>
+					</staticText>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+						<reportElement stretchType="RelativeToBandHeight" x="120" y="0" width="435" height="20" uuid="833920c7-1b81-447b-a9bd-dbc5496edb20"/>
+						<box leftPadding="2" rightPadding="2"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="Arial"/>
+						</textElement>
+						<textFieldExpression><![CDATA[": " + $F{packageDetails}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" x="0" y="115" width="555" height="100" uuid="f4ca787c-5179-43a4-bbae-7e55db30e9b4">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="120" height="20" uuid="786e5de6-c2ef-4d8e-bc7f-2ecffd854b94">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Name]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="40" width="435" height="20" uuid="e6e0e855-4790-4650-a91e-7d83fe4b7a48"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{guestId}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="20" width="435" height="20" uuid="045626df-84fa-4e2a-bbfa-4165e146dd0d"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{guestName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="80" width="120" height="20" uuid="b2cb2051-7ada-454d-be7f-d33fdc341519">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Phone Number]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="60" width="120" height="20" uuid="b540b5e5-34fc-4545-9699-3ba09d9d176c">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Email]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="40" width="120" height="20" uuid="f55eadfe-a94a-437a-96f0-cc0a4aacf5ab">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[ID Number ]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="80" width="435" height="20" uuid="e18b1027-b867-4b58-9aef-e9475e1a158d"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{mobile}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="34c589de-9ed5-4eea-b31a-2bff39a820c5">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<text><![CDATA[GUEST DETAILS ]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="60" width="435" height="20" uuid="a32e3548-b34a-4610-ad65-be70c5ef4da0"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{email}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" x="0" y="225" width="555" height="60" uuid="673875dc-0586-4065-b4c0-0b9adb36626f"/>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="120" height="20" uuid="4b8e5ad4-40b5-46bf-b649-49d06a992fc5">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Payment Date ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="40" width="120" height="20" uuid="1a6358c3-a1ea-446e-b29c-36769806df97">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<text><![CDATA[Payment Method]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="40" width="435" height="20" uuid="354e735e-9875-4133-a9a7-2ec297e32f84"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{paymentMethod}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="120" y="20" width="435" height="20" uuid="05d2b85e-2e0e-494d-a502-7c8e74633ab0"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{paymentDate}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="20" uuid="6c1f5c68-1ae5-406f-b951-a65fb58d596d">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<text><![CDATA[PAYMENT SUMMARY]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="184" splitType="Stretch">
+			<frame>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="15" width="555" height="165" isPrintWhenDetailOverflows="true" uuid="79dc8798-18dd-42f5-904b-8864144e74b4">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="0" y="10" width="555" height="30" uuid="e4abf23a-6cd0-4f42-8d46-c34722cc0ae6">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA["<b>NOTE :</b> MCM Studio Entertainment Sdn Bhd, “MCM” reserves the right to amend or add to the terms and conditions at any time without prior notice. Any resale of tickets/vouchers is strictly prohibited unless authorized in writing by MCM. MCM reserves the right to invalidate tickets/vouchers in connection with any fraudulent/unauthorized resale transaction, without refund or other compensation. This ticket/voucher is a revocable license and admission to the theme park may be refused upon refunding the price paid for the ticket. "]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="1" uuid="8ed2233c-9e19-426e-b653-a7a0ea31b32e">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+				</line>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="112" width="555" height="18" uuid="a15535e5-2a04-4cba-8a20-e64f8c5ad188">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Address : Capital 21Shopping Mall, Jalan Tampoi, 81300 Johor Bahru, Johor Darul Takzim, Malaysia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="94" width="555" height="18" uuid="2ffb8132-d521-49f7-aac0-e8e244a3675b"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Tel	  : 07 -244 8322 / 07- 244 8622]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="56" width="555" height="20" uuid="a5a93d96-3abf-488d-9bb0-43172a18a709"/>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Need help? You can reach us at ;]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="76" width="555" height="18" uuid="2ebe7a35-2a3c-4f21-9a86-b216a9b75744">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="2" rightPadding="2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Email 	  : mcmstudio.my@gmail.com]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</lastPageFooter>
+</jasperReport>

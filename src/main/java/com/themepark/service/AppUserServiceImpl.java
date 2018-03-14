@@ -1,6 +1,7 @@
 package com.themepark.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.themepark.Constants;
+import com.themepark.ReportBeanClass;
 import com.themepark.dto.AnnualPassDto;
 import com.themepark.dto.BigLondonAdmissionFeeDto;
 import com.themepark.dto.EntryPackageDto;
@@ -525,6 +527,86 @@ public class AppUserServiceImpl implements AppUserService {
 		}
 		
 		return bigLondonAdmissionFeeDtos;
+	}
+	
+	@Override
+	public ReportBeanClass generateReportBean(Long appUserId) {
+		if (appUserId != null) {
+			DateFormat formatter = new SimpleDateFormat("dd-MM-YYYY");
+			AppUser appUser = this.appUserRepository.findOne(appUserId);
+			
+			ReportBeanClass reportBeanClass = new ReportBeanClass();
+			
+			reportBeanClass.setGuestId(appUser.getRegistrationDetails().getIdentityNumber());
+			reportBeanClass.setGuestName(appUser.getFirstName());
+			reportBeanClass.setEmail(appUser.getEmail());
+			reportBeanClass.setMobile("+" + appUser.getMobileIntCallingCode() + " " + appUser.getMobileNumber());
+			reportBeanClass.setBookingDate(formatter.format(appUser.createdDate));
+			
+			RegistrationDetails details = appUser.getRegistrationDetails();
+			if (details != null) {
+				reportBeanClass.setPaymentDate(formatter.format(details.getPaymentDate()));
+				reportBeanClass.setPaymentMethod(details.getPaymentMode().name());
+				reportBeanClass.setTotalAmount(BigDecimal.valueOf(details.getTotalPaid()));
+			} else {
+				reportBeanClass.setPaymentDate("");
+				reportBeanClass.setPaymentMethod("");
+				reportBeanClass.setTotalAmount(BigDecimal.ZERO);
+			}
+			
+			StringBuilder builder = new StringBuilder();
+			List<EntryPackageDto> entryPackageDtos = mapEntryPackageDtos(
+					this.appUserEntryPackageRepository.findByAppUser(appUser));
+			if (!entryPackageDtos.isEmpty()) {
+				builder.append("Packages : \n");
+				for (EntryPackageDto dto : entryPackageDtos) {
+					builder.append(dto.getName()).append(dto.getDescription() != null ? dto.getDescription() : "")
+							.append(", Qty : ").append(dto.getSelectedCount()).append("\n\n");
+				}
+			}
+			
+			List<SingleEntryPassDto> singleEntryPassDtos = mapSingleEntryPassDtos(
+					this.appUserSingleEntryPassRepository.findByAppUser(appUser));
+			if (!singleEntryPassDtos.isEmpty()) {
+				builder.append("Single Entry Pass : \n");
+				for (SingleEntryPassDto dto : singleEntryPassDtos) {
+					builder.append(dto.getType()).append(dto.getDescription() != null ? dto.getDescription() : "")
+							.append(", Qty : ").append(dto.getSelectedCount()).append("\n\n");
+				}
+			}
+
+			List<AnnualPassDto> annualPassDtos = mapAnnualPassDtos(
+					this.appUserAnnualPassRepository.findByAppUser(appUser));
+			if (!annualPassDtos.isEmpty()) {
+				builder.append("Annual Pass : \n");
+				for (AnnualPassDto dto : annualPassDtos) {
+					builder.append(dto.getType()).append(dto.getDescription() != null ? dto.getDescription() : "")
+							.append(", Qty : ").append(dto.getSelectedCount()).append("\n\n");
+				}
+			}
+			
+			List<BigLondonAdmissionFeeDto> bigLondonAdmissionFeeDtos = mapBigLondonAdmissionFeeDtos(
+					this.appUserBLAdmissionFeeRepository.findByAppUser(appUser));
+			if (!bigLondonAdmissionFeeDtos.isEmpty()) {
+				builder.append("Big London Admission Fee : \n");
+				for (BigLondonAdmissionFeeDto dto : bigLondonAdmissionFeeDtos) {
+					builder.append(dto.getType()).append(dto.getDescription() != null ? dto.getDescription() : "");
+					if (dto.getAdultSelectedCount() != null) {
+						builder.append(", Adults Qty : ").append(dto.getAdultSelectedCount());
+					}
+					if (dto.getKidsOrSrCitizenSelectedCount() != null) {
+						builder.append(", Kids or Sr Citizen Qty : ").append(dto.getKidsOrSrCitizenSelectedCount());
+					}
+					builder.append("\n\n");
+				}
+			}
+			
+			reportBeanClass.setPackageDetails(builder.toString());
+			
+			return reportBeanClass;
+		}
+		
+		return null;
 	}
 
     /*@Override

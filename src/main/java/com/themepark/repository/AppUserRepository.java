@@ -2,6 +2,8 @@ package com.themepark.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,5 +21,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     
     AppUser findFirstByEmailAndPasswordAndRoleNot(String email, String password, Role role);
     
+    @Transactional
     List<AppUser> findByRole(Role role);
 }

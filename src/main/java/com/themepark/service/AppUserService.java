@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.themepark.ReportBeanClass;
 import com.themepark.dto.LoginDto;
 import com.themepark.dto.UserRegistrationDto;
 import com.themepark.model.AppUser;
@@ -22,4 +23,6 @@ public interface AppUserService {
 	List<UserRegistrationDto> getRegisteredUsers();
 	
 	List<UserRegistrationDto> mapRegisteredUsers(List<AppUser> appUsers);
+	
+	ReportBeanClass generateReportBean(Long appUserId);
 }
