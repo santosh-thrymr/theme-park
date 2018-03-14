@@ -299,10 +299,6 @@ $(document).ready(function() {
 	
 	});
 	
-	$(document).on('change', '.nationality', function() {
-		
-
-	});
-	
-         });
+	$(".example").dateDropdowns();
+ });
 // ]]>
