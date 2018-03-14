@@ -62,10 +62,11 @@
 									<div class="row">
 											<div class="col-md-6">
 												<div class="form-group customform-group row">
-											  	<label class="control-label col-md-12" for="">Phone number <span class="star-color">*</span></label>
+											  	<label class="control-label col-md-12" for="">Phone number</label>
 													<div class="col-md-5">
 								                          <select class="form-control" id="sel1" th:field="*{phoneIntCallingCode}">
-								                             <option data-countryCode="GB" value="44" selected="selected">UK (+44)</option>
+								                          	<option data-countryCode="MY" value="60" selected="selected">Malaysia (+60)</option>
+								                             <option data-countryCode="GB" value="44">UK (+44)</option>
 															<option data-countryCode="US" value="1">USA (+1)</option>
 															<option data-countryCode="DZ" value="213">Algeria (+213)</option>
 															<option data-countryCode="AD" value="376">Andorra (+376)</option>
@@ -182,7 +183,6 @@
 															<option data-countryCode="MK" value="389">Macedonia (+389)</option>
 															<option data-countryCode="MG" value="261">Madagascar (+261)</option>
 															<option data-countryCode="MW" value="265">Malawi (+265)</option>
-															<option data-countryCode="MY" value="60">Malaysia (+60)</option>
 															<option data-countryCode="MV" value="960">Maldives (+960)</option>
 															<option data-countryCode="ML" value="223">Mali (+223)</option>
 															<option data-countryCode="MT" value="356">Malta (+356)</option>
@@ -292,10 +292,11 @@
 
 											<div class="col-md-6">
 												<div class="form-group customform-group row">
-											  	<label class="control-label col-md-12" for="">Mobile number <span class="star-color">*</span></label>
+											  	<label class="control-label col-md-12" for="">Mobile number</label>
 													<div class="col-md-5">
 															 <select class="form-control" id="sel1" th:field="*{mobileIntCallingCode}">
-																<option data-countryCode="GB" value="44" selected="selected">UK (+44)</option>
+															 	<option data-countryCode="MY" value="60" selected="selected">Malaysia (+60)</option>
+																<option data-countryCode="GB" value="44">UK (+44)</option>
 																<option data-countryCode="US" value="1">USA (+1)</option>
 																<option data-countryCode="DZ" value="213">Algeria (+213)</option>
 																<option data-countryCode="AD" value="376">Andorra (+376)</option>
@@ -412,7 +413,6 @@
 																<option data-countryCode="MK" value="389">Macedonia (+389)</option>
 																<option data-countryCode="MG" value="261">Madagascar (+261)</option>
 																<option data-countryCode="MW" value="265">Malawi (+265)</option>
-																<option data-countryCode="MY" value="60">Malaysia (+60)</option>
 																<option data-countryCode="MV" value="960">Maldives (+960)</option>
 																<option data-countryCode="ML" value="223">Mali (+223)</option>
 																<option data-countryCode="MT" value="356">Malta (+356)</option>
@@ -540,8 +540,8 @@
 												<div class="form-group customform-group">
 											  	<label class="control-label" for="">Country of residency <span class="star-color">*</span></label>
 													<select class="form-control marg10 country" id="country" th:field="*{countryOfResidence}" required="required">
-							                          <option value="">Please select</option>
-							                          <option value="Afghanistan">Afghanistan</option>
+							                         <option value="Malaysia" selected="selected">Malaysia</option>
+							                         <option value="Afghanistan">Afghanistan</option>
 												    <option value="Albania">Albania</option>
 												    <option value="Algeria">Algeria</option>
 												    <option value="American Samoa">American Samoa</option>
@@ -671,7 +671,6 @@
 												    <option value="Macedonia">Macedonia, The Former Yugoslav Republic of</option>
 												    <option value="Madagascar">Madagascar</option>
 												    <option value="Malawi">Malawi</option>
-												    <option value="Malaysia">Malaysia</option>
 												    <option value="Maldives">Maldives</option>
 												    <option value="Mali">Mali</option>
 												    <option value="Malta">Malta</option>
@@ -787,7 +786,7 @@
 												<div class="form-group customform-group">
 											  	<label class="control-label" for="">Nationality <span class="star-color">*</span></label>
 													<select class="form-control marg10 nationality" id="sel1" th:field="*{nationality}" required="required">
-								                         	<option value="">Please select</option>
+								                         <option value="malaysian" selected="selected">Malaysian</option>
 								                      	  <option value="afghan">Afghan</option>
 														  <option value="albanian">Albanian</option>
 														  <option value="algerian">Algerian</option>
@@ -895,7 +894,6 @@
 														  <option value="macedonian">Macedonian</option>
 														  <option value="malagasy">Malagasy</option>
 														  <option value="malawian">Malawian</option>
-														  <option value="malaysian">Malaysian</option>
 														  <option value="maldivan">Maldivan</option>
 														  <option value="malian">Malian</option>
 														  <option value="maltese">Maltese</option>
@@ -992,12 +990,12 @@
 													<textarea class="textclass form-control" placeholder="Identity proof/Passport No." th:field="*{identityNumber}" required="required"></textarea>
 											  </div>
 											</div>
-											<div class="col-md-6">
+											<!-- <div class="col-md-6">
 												<div class="form-group customform-group">
 											  	<label class="control-label" for="">Topup </label>
 													<input type="text" class="input-class form-control numberValidation" th:field="*{topup}"/>
 											  </div>
-											</div>
+											</div> -->
 									</div>
 
 							</div>
