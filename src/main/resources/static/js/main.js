@@ -299,6 +299,6 @@ $(document).ready(function() {
 	
 	});
 	
-	$(".example").dateDropdowns();
+	$(".date-picker").dateDropdowns();
  });
 // ]]>

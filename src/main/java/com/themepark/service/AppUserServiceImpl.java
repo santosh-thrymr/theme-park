@@ -96,14 +96,16 @@ public class AppUserServiceImpl implements AppUserService {
         
         user.setEnableSmsUpdate(registrationDto.getEnableSmsUpdate());
         user.setEnableEmailUpdate(registrationDto.getEnableEmailUpdate());
-        user.setPhoneIntCallingCode(registrationDto.getPhoneIntCallingCode());
+        if (registrationDto.getPhoneNumber() != null) {
+        		user.setPhoneIntCallingCode(registrationDto.getPhoneIntCallingCode());
+        }
         user.setPhoneNumber(registrationDto.getPhoneNumber());
         user.setMobileIntCallingCode(registrationDto.getMobileIntCallingCode());
         user.setMobileNumber(registrationDto.getMobileNumber());
         
 		if (!StringUtils.isEmpty(registrationDto.getDob())) {
 			try {
-				user.setDob(new SimpleDateFormat("dd-MM-yyyy").parse(registrationDto.getDob()));
+				user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(registrationDto.getDob()));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
